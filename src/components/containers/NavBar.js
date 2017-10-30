@@ -1,7 +1,16 @@
 import React, { Component } from 'react'
 import { Link }             from 'react-router-dom'
+import { connect }          from 'react-redux'
+import actions              from '../../actions'
 
 class NavBar extends Component{
+    constructor(props){
+        super(props)
+    }
+    logout(){
+        this.props.logout()
+        this.props.history.push('/')
+    }
     render(){
         return(
             <div>
@@ -12,9 +21,18 @@ class NavBar extends Component{
 
                         </div>
                         <ul className="nav navbar-nav">
-                            <li><Link to="/sigin">Sign In</Link></li>
-                            <li><Link to="/signup">Sign Up</Link></li>
-
+                            {
+                            this.props.user.id != ''  ? 
+                                <ul className="nav navbar-nav navbar-right">
+                                    <li><Link to="/new-project">New Project</Link></li>
+                                    <li><Link to="" >Logout</Link></li>
+                                    <li><a>{`Hey there ${this.props.user.username}`}</a></li>
+                                </ul> : 
+                                <ul className="nav navbar-nav navbar-right">
+                                    <li><Link to="/signin">Sign In</Link></li>
+                                    <li><Link to="/signup">Sign Up</Link></li>
+                                </ul>
+                            }
                         </ul>
                     </div>
                 </nav>
@@ -25,4 +43,17 @@ class NavBar extends Component{
     }
 }
 
-export default NavBar
+const mapStateToProps = state => {
+    const { user } = state
+    return{
+        user
+    }
+}
+
+const dispatchToProps = dispatch => {
+    return{
+        logout: () => dispatch(actions.logoutUser())
+    }
+}
+
+export default connect(mapStateToProps,dispatchToProps)(NavBar)

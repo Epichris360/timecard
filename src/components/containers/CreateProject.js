@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import actions from '../../actions'
 
 class CreateProject extends Component{
     constructor(props){
@@ -12,7 +14,15 @@ class CreateProject extends Component{
         if( name == '' && description == '' ){
             throw 'error!'
         }
-        console.log( {name, description} )
+        this.props.createProject({name, description, user_id: this.props.user.id})
+        .then(data => {
+            console.log('data',data)
+            this.props.history.push('/')
+            return
+        })
+        .catch(err => {
+            console.log('err',err.message)
+        })
     }
     render(){
         return(
@@ -30,12 +40,23 @@ class CreateProject extends Component{
                         onClick={ this.createProject.bind(this) }>
                     Submit!
                 </button>
-                <button onClick={() => console.log('state',this.state)}>
-                    this.state 
-                </button>
             </div>
         )
     }
 }
 
-export default CreateProject
+const mapStateToProps = state => {
+    const { user } = state
+    return{
+        user
+    }
+}
+
+const dispatchToProps = dispatch => {
+    return{
+        createProject: params => dispatch(actions.createProject(params))
+    }
+}
+
+
+export default connect(mapStateToProps,dispatchToProps)(CreateProject)

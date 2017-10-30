@@ -9,9 +9,10 @@ import Users 		 from './Users'
 import MainPage 	 from './MainPage'
 import CreateProject from './CreateProject'
 import NavBar 		 from './NavBar'
-
+import SignIn		 from './SignIn'
+import SignUp		 from './SignUp'
 export {
 
-	Users, MainPage, CreateProject, NavBar
+	Users, MainPage, CreateProject, NavBar, SignIn, SignUp
 	
 }

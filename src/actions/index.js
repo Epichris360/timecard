@@ -39,6 +39,12 @@ export default {
 		return dispatch => {
 			return dispatch(TurboClient.currentUser(constants.CURRENT_USER_RECEIVED))
 		}
+	},
+
+	createProject: params => {
+		return dispatch => {
+			return dispatch(TurboClient.postRequest('projects',params, constants.NEW_PROJECTS))
+		}
 	}
 	
 }

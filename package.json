@@ -1,0 +1,60 @@
+{
+  "name": "TimeCard",
+  "version": "0.0.0",
+  "server": false,
+  "private": true,
+  "scripts": {
+    "clean": "rm -rf ./public/dist",
+    "build": "npm run clean && NODE_ENV=production webpack && gulp prod",
+    "postinstall": "npm run build"
+  },
+  "dependencies": {
+    "bluebird": "latest",
+    "debug": "latest",
+    "dotenv": "latest",
+    "moment": "latest",
+    "react": "latest",
+    "react-bootstrap": "latest",
+    "react-dom": "latest",
+    "react-dropzone": "latest",
+    "react-redux": "latest",
+    "react-router-dom": "^4.2.2",
+    "react-time": "latest",
+    "redux": "latest",
+    "redux-thunk": "latest",
+    "superagent": "latest",
+    "turbo360": "latest",
+    "vertex360": "latest"
+  },
+  "devDependencies": {
+    "babel-core": "latest",
+    "babel-loader": "latest",
+    "babel-preset-es2015": "latest",
+    "babel-preset-react": "latest",
+    "json-loader": "latest",
+    "gulp": "latest",
+    "gulp-autoprefixer": "latest",
+    "gulp-6to5": "latest",
+    "gulp-concat": "latest",
+    "gulp-less": "latest",
+    "gulp-minify-css": "latest",
+    "gulp-rename": "latest",
+    "gulp-uglify": "latest",
+    "chai": "latest",
+    "chai-http": "latest",
+    "nodemon": "latest",
+    "mocha": "latest",
+    "mocha-jscs": "latest",
+    "mocha-jshint": "latest",
+    "rimraf": "latest",
+    "webpack": "latest"
+  },
+  "functions": {
+    "turbo360": "latest"
+  },
+  "app": "59f7657bd9ac9f001212d220",
+  "deploy": [
+    "."
+  ],
+  "format": "vertex"
+}

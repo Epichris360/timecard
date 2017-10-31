@@ -7100,7 +7100,7 @@ exports.default = {
 
 	createProject: function createProject(params) {
 		return function (dispatch) {
-			return dispatch(_utils.TurboClient.postRequest('projects', params, _constants2.default.NEW_PROJECTS));
+			return dispatch(_utils.TurboClient.postRequest('projects', params, _constants2.default.NEW_PROJECT));
 		};
 	},
 
@@ -8903,7 +8903,7 @@ exports.default = {
 	USER_LOGGED_IN: 'USER_LOGGED_IN',
 	CURRENT_USER_RECEIVED: 'CURRENT_USER_RECEIVED',
 
-	NEW_PROJECTS: 'NEW_PROJECTS',
+	NEW_PROJECT: 'NEW_PROJECT',
 	GET_PROJECTS: 'GET_PROJECTS'
 
 };
@@ -10057,7 +10057,8 @@ var app = _react2.default.createElement(
 					_react2.default.createElement(_reactRouterDom.Route, { path: '/new-project', component: _containers.CreateProject }),
 					_react2.default.createElement(_reactRouterDom.Route, { path: '/projects', component: _containers.ProjectsList }),
 					_react2.default.createElement(_reactRouterDom.Route, { path: '/signin', component: _containers.SignIn }),
-					_react2.default.createElement(_reactRouterDom.Route, { path: '/signup', component: _containers.SignUp })
+					_react2.default.createElement(_reactRouterDom.Route, { path: '/signup', component: _containers.SignUp }),
+					_react2.default.createElement(_reactRouterDom.Route, { path: '/project/:slug', component: _containers.ProjectShow })
 				)
 			)
 		)
@@ -30265,7 +30266,8 @@ exports.default = {
 		// initialState can be null
 
 		var reducers = (0, _redux.combineReducers)({ // insert reducers here
-			user: _reducers.userReducer
+			user: _reducers.userReducer,
+			projects: _reducers.projectsReducer
 		});
 
 		if (initialState) {
@@ -30896,18 +30898,25 @@ exports['default'] = thunk;
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.userReducer = undefined;
+exports.projectsReducer = exports.userReducer = undefined;
 
 var _userReducer = __webpack_require__(89);
 
 var _userReducer2 = _interopRequireDefault(_userReducer);
 
+var _projectsReducer = __webpack_require__(151);
+
+var _projectsReducer2 = _interopRequireDefault(_projectsReducer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.userReducer = _userReducer2.default; /* * * * * * * * * * * * * * * * * * * * * * * * * * *
-                                             	Export your reducers here
-                                             * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-                                             */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * *
+	Export your reducers here
+* * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*/
+
+exports.userReducer = _userReducer2.default;
+exports.projectsReducer = _projectsReducer2.default;
 
 /***/ }),
 /* 89 */
@@ -34507,7 +34516,7 @@ var withRouter = function withRouter(Component) {
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.ProjectsList = exports.SignUp = exports.SignIn = exports.NavBar = exports.CreateProject = exports.MainPage = exports.Users = undefined;
+exports.ProjectShow = exports.ProjectsList = exports.SignUp = exports.SignIn = exports.NavBar = exports.CreateProject = exports.MainPage = exports.Users = undefined;
 
 var _Users = __webpack_require__(125);
 
@@ -34537,7 +34546,18 @@ var _ProjectsList = __webpack_require__(149);
 
 var _ProjectsList2 = _interopRequireDefault(_ProjectsList);
 
+var _ProjectShow = __webpack_require__(150);
+
+var _ProjectShow2 = _interopRequireDefault(_ProjectShow);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * *
+	Export your container components here. The Users
+	container is just an example and you will likely
+	remove it in favor of your own containers. 
+* * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*/
 
 exports.Users = _Users2.default;
 exports.MainPage = _MainPage2.default;
@@ -34545,12 +34565,8 @@ exports.CreateProject = _CreateProject2.default;
 exports.NavBar = _NavBar2.default;
 exports.SignIn = _SignIn2.default;
 exports.SignUp = _SignUp2.default;
-exports.ProjectsList = _ProjectsList2.default; /* * * * * * * * * * * * * * * * * * * * * * * * * * *
-                                               	Export your container components here. The Users
-                                               	container is just an example and you will likely
-                                               	remove it in favor of your own containers. 
-                                               * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-                                               */
+exports.ProjectsList = _ProjectsList2.default;
+exports.ProjectShow = _ProjectShow2.default;
 
 /***/ }),
 /* 125 */
@@ -36519,8 +36535,7 @@ var CreateProject = function (_Component) {
             if (name == '' && description == '') {
                 throw 'error!';
             }
-            this.props.createProject({ name: name, description: description, user_id: this.props.user.id }).then(function (data) {
-                console.log('data', data);
+            this.props.createProject({ name: name, description: description, user_id: this.props.user.id, slug: name.split(' ').join('+') }).then(function (data) {
                 _this2.props.history.push('/');
                 return;
             }).catch(function (err) {
@@ -37105,6 +37120,8 @@ var _actions = __webpack_require__(10);
 
 var _actions2 = _interopRequireDefault(_actions);
 
+var _reactRouterDom = __webpack_require__(45);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -37133,8 +37150,7 @@ var ProjectsList = function (_Component) {
             var _this2 = this;
 
             this.props.getProjects({ user_id: this.props.user.id }).then(function (data) {
-                console.log('data', data);
-                _this2.setState({ projects: data, loading: false });
+                _this2.setState({ loading: false });
             }).catch(function (err) {
                 console.log('err', err.message);
             });
@@ -37153,29 +37169,37 @@ var ProjectsList = function (_Component) {
                     'Loading.....'
                 ) : _react2.default.createElement(
                     'div',
-                    null,
-                    this.state.projects.map(function (p, i) {
+                    { className: 'row' },
+                    this.props.projects.map(function (p, i) {
                         return _react2.default.createElement(
                             'div',
                             { key: i, className: 'card', style: { width: '340px', padding: '10px', border: '1px solid black' } },
-                            _react2.default.createElement('img', { className: 'card-img-top', src: 'http://via.placeholder.com/318x180?text=' + p.name.split(' ').join('+'), alt: 'Card image cap' }),
+                            _react2.default.createElement(
+                                'div',
+                                { style: { width: 318, height: 180, backgroundColor: 'red' } },
+                                _react2.default.createElement(
+                                    'h1',
+                                    { className: 'text-center', style: { color: 'white', padding: 40 } },
+                                    p.name
+                                )
+                            ),
                             _react2.default.createElement(
                                 'div',
                                 { className: 'card-block' },
                                 _react2.default.createElement(
                                     'h4',
                                     { className: 'card-title' },
-                                    'Card title'
+                                    p.name
                                 ),
                                 _react2.default.createElement(
                                     'p',
                                     { className: 'card-text' },
-                                    'Some quick example text to build on the card title and make up the bulk of the card\'s content.'
+                                    p.description.substr(0, 40) + '....'
                                 ),
                                 _react2.default.createElement(
-                                    'a',
-                                    { href: '#', className: 'btn btn-primary' },
-                                    'Go somewhere'
+                                    _reactRouterDom.Link,
+                                    { to: '/project/' + p.slug, className: 'btn btn-primary' },
+                                    'Info'
                                 )
                             )
                         );
@@ -37190,10 +37214,11 @@ var ProjectsList = function (_Component) {
 }(_react.Component);
 
 var mapStateToProps = function mapStateToProps(state) {
-    var user = state.user;
+    var user = state.user,
+        projects = state.projects;
 
     return {
-        user: user
+        user: user, projects: projects
     };
 };
 
@@ -37206,6 +37231,101 @@ var dispatchToProps = function dispatchToProps(dispatch) {
 };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, dispatchToProps)(ProjectsList);
+
+/***/ }),
+/* 150 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ProjectShow = function (_Component) {
+    _inherits(ProjectShow, _Component);
+
+    function ProjectShow(props) {
+        _classCallCheck(this, ProjectShow);
+
+        var _this = _possibleConstructorReturn(this, (ProjectShow.__proto__ || Object.getPrototypeOf(ProjectShow)).call(this, props));
+
+        _this.state = {};
+        return _this;
+    }
+
+    _createClass(ProjectShow, [{
+        key: 'componentDidmount',
+        value: function componentDidmount() {}
+    }, {
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                null,
+                'this is the project show Component'
+            );
+        }
+    }]);
+
+    return ProjectShow;
+}(_react.Component);
+
+exports.default = ProjectShow;
+
+/***/ }),
+/* 151 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _constants = __webpack_require__(39);
+
+var _constants2 = _interopRequireDefault(_constants);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var initialState = [];
+
+exports.default = function () {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+    var action = arguments[1];
+
+    var newState = void 0;
+    switch (action.type) {
+
+        case _constants2.default.GET_PROJECTS:
+            return action.data;
+
+        case _constants2.default.NEW_PROJECT:
+            newState = state;
+            newState.push(action.data);
+            return newState;
+
+        default:
+            return state;
+    }
+};
 
 /***/ })
 ],[55]);

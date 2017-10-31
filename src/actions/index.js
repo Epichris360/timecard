@@ -43,7 +43,7 @@ export default {
 
 	createProject: params => {
 			return dispatch => {
-				return dispatch(TurboClient.postRequest('projects',params, constants.NEW_PROJECTS))
+				return dispatch(TurboClient.postRequest('projects',params, constants.NEW_PROJECT))
 			}
 	},
 

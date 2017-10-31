@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import actions from '../../actions'
+import { connect }          from 'react-redux'
+import actions              from '../../actions'
+import { Link }             from 'react-router-dom'
+
 
 class ProjectsList extends Component{
     constructor(props){
@@ -12,8 +14,7 @@ class ProjectsList extends Component{
     componentDidMount(){
         this.props.getProjects({user_id: this.props.user.id})
         .then(data => {
-            console.log('data',data)
-            this.setState({projects:data, loading:false})
+            this.setState({ loading:false})
         })
         .catch(err => {
             console.log('err',err.message)
@@ -26,16 +27,18 @@ class ProjectsList extends Component{
                 <hr/>
                 {
                     this.state.loading ? <h1>Loading.....</h1> :
-                    <div>
+                    <div className="row">
                         {
-                            this.state.projects.map( (p,i) => {
+                            this.props.projects.map( (p,i) => {
                                 return(
                                     <div key={i} className="card" style={{width: '340px', padding:'10px', border:'1px solid black'}}>
-                                        <img className="card-img-top" src={`http://via.placeholder.com/318x180?text=${p.name.split(' ').join('+')}`} alt="Card image cap"/>
+                                        <div style={{width:318,height:180,backgroundColor:'red'}}>
+                                            <h1 className="text-center" style={{color:'white',padding:40}}>{p.name}</h1>
+                                        </div>
                                         <div className="card-block">
-                                            <h4 className="card-title">Card title</h4>
-                                            <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                            <a href="#" className="btn btn-primary">Go somewhere</a>
+                                            <h4 className="card-title">{p.name}</h4>
+                                            <p className="card-text">{p.description.substr(0,40) + '....'}</p>
+                                            <Link to={`/project/${p.slug}`} className="btn btn-primary">Info</Link>
                                         </div>
                                     </div>
                                 )
@@ -52,9 +55,9 @@ class ProjectsList extends Component{
 }
 
 const mapStateToProps = state => {
-    const { user } = state
+    const { user, projects } = state
     return{
-        user
+        user, projects
     }
 }
 

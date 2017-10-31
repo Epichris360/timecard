@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom'
 import store from './stores'
 import { Provider } from 'react-redux'
 import { Switch, BrowserRouter as Router, Route  } from 'react-router-dom'
-import { MainPage, CreateProject, NavBar, SignIn, SignUp, ProjectsList } from './components/containers'
+import { MainPage, CreateProject, NavBar, 
+		SignIn, SignUp, ProjectsList, ProjectShow } from './components/containers'
 
 const app = (
 	<Provider store={store.configure(null)}>
@@ -17,6 +18,7 @@ const app = (
 						<Route path="/projects"    component={ProjectsList} />
 						<Route path="/signin"      component={SignIn} />
 						<Route path="/signup"      component={SignUp}/>
+						<Route path="/project/:slug" component={ProjectShow} />
 					</Switch>
 				</div>
 			</div>

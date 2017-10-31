@@ -36518,7 +36518,7 @@ var CreateProject = function (_Component) {
         var _this = _possibleConstructorReturn(this, (CreateProject.__proto__ || Object.getPrototypeOf(CreateProject)).call(this, props));
 
         _this.state = {
-            name: '', description: ''
+            name: '', description: '', color: '#80a7e5'
         };
         return _this;
     }
@@ -36530,13 +36530,15 @@ var CreateProject = function (_Component) {
 
             var _state = this.state,
                 name = _state.name,
-                description = _state.description;
+                description = _state.description,
+                color = _state.color;
 
             if (name == '' && description == '') {
                 throw 'error!';
             }
-            this.props.createProject({ name: name, description: description, user_id: this.props.user.id, slug: name.split(' ').join('+') }).then(function (data) {
-                _this2.props.history.push('/');
+            this.props.createProject({ name: name, description: description, color: color,
+                user_id: this.props.user.id, slug: name.split(' ').join('+') }).then(function (data) {
+                _this2.props.history.push('/projects');
                 return;
             }).catch(function (err) {
                 console.log('err', err.message);
@@ -36575,6 +36577,25 @@ var CreateProject = function (_Component) {
                         return _this3.setState({ description: e.target.value });
                     } }),
                 _react2.default.createElement('br', null),
+                _react2.default.createElement(
+                    'h4',
+                    null,
+                    'Pick a Color for Your Projects Color:'
+                ),
+                _react2.default.createElement('input', { type: 'color', onChange: function onChange(e) {
+                        return _this3.setState({ color: e.target.value });
+                    } }),
+                _react2.default.createElement('hr', null),
+                _react2.default.createElement(
+                    'div',
+                    { style: { width: 318, height: 180, backgroundColor: this.state.color } },
+                    _react2.default.createElement(
+                        'h1',
+                        { className: 'text-center', style: { color: 'white', padding: 40 } },
+                        this.state.name
+                    )
+                ),
+                _react2.default.createElement('hr', null),
                 _react2.default.createElement(
                     'button',
                     { className: 'btn btn-success btn-lg pull-right',
@@ -37161,7 +37182,11 @@ var ProjectsList = function (_Component) {
             return _react2.default.createElement(
                 'div',
                 null,
-                'My Projects:',
+                _react2.default.createElement(
+                    'h1',
+                    null,
+                    'My Projects:'
+                ),
                 _react2.default.createElement('hr', null),
                 this.state.loading ? _react2.default.createElement(
                     'h1',
@@ -37173,10 +37198,10 @@ var ProjectsList = function (_Component) {
                     this.props.projects.map(function (p, i) {
                         return _react2.default.createElement(
                             'div',
-                            { key: i, className: 'card', style: { width: '340px', padding: '10px', border: '1px solid black' } },
+                            { key: i, className: 'col-md-4 card', style: { width: '340px', padding: '10px', border: '1px solid black', margin: '10px' } },
                             _react2.default.createElement(
                                 'div',
-                                { style: { width: 318, height: 180, backgroundColor: 'red' } },
+                                { style: { width: 318, height: 180, backgroundColor: p.color } },
                                 _react2.default.createElement(
                                     'h1',
                                     { className: 'text-center', style: { color: 'white', padding: 40 } },
@@ -37249,6 +37274,8 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRedux = __webpack_require__(9);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -37265,20 +37292,53 @@ var ProjectShow = function (_Component) {
 
         var _this = _possibleConstructorReturn(this, (ProjectShow.__proto__ || Object.getPrototypeOf(ProjectShow)).call(this, props));
 
-        _this.state = {};
+        _this.state = {
+            projectOrig: null, projectChange: null, loading: true
+        };
         return _this;
     }
 
     _createClass(ProjectShow, [{
-        key: 'componentDidmount',
-        value: function componentDidmount() {}
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var _this2 = this;
+
+            //will have to change if srr
+            var project = this.props.projects.filter(function (p) {
+                return p.slug == _this2.props.match.params.slug;
+            })[0];
+            this.setState({ projectOrig: project, projectChange: project, loading: false });
+        }
     }, {
         key: 'render',
         value: function render() {
             return _react2.default.createElement(
                 'div',
                 null,
-                'this is the project show Component'
+                this.state.loading ? _react2.default.createElement(
+                    'h1',
+                    null,
+                    'Loading...'
+                ) : _react2.default.createElement(
+                    'div',
+                    null,
+                    _react2.default.createElement(
+                        'h1',
+                        null,
+                        this.state.projectOrig.name
+                    ),
+                    _react2.default.createElement('hr', null),
+                    _react2.default.createElement(
+                        'p',
+                        null,
+                        this.state.projectOrig.description
+                    ),
+                    _react2.default.createElement(
+                        'h4',
+                        null,
+                        'Tasks:'
+                    )
+                )
             );
         }
     }]);
@@ -37286,7 +37346,19 @@ var ProjectShow = function (_Component) {
     return ProjectShow;
 }(_react.Component);
 
-exports.default = ProjectShow;
+var mapStateToProps = function mapStateToProps(state) {
+    var projects = state.projects;
+
+    return {
+        projects: projects
+    };
+};
+
+var dispatchToProps = function dispatchToProps(dispatch) {
+    return {};
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, dispatchToProps)(ProjectShow);
 
 /***/ }),
 /* 151 */

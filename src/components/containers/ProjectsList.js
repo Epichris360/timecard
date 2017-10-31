@@ -23,7 +23,7 @@ class ProjectsList extends Component{
     render(){
         return(
             <div>
-                My Projects:
+                <h1>My Projects:</h1>
                 <hr/>
                 {
                     this.state.loading ? <h1>Loading.....</h1> :
@@ -31,8 +31,8 @@ class ProjectsList extends Component{
                         {
                             this.props.projects.map( (p,i) => {
                                 return(
-                                    <div key={i} className="card" style={{width: '340px', padding:'10px', border:'1px solid black'}}>
-                                        <div style={{width:318,height:180,backgroundColor:'red'}}>
+                                    <div key={i} className="col-md-4 card" style={{width: '340px', padding:'10px', border:'1px solid black', margin:'10px'}}>
+                                        <div style={{ width:318, height:180, backgroundColor:p.color }}>
                                             <h1 className="text-center" style={{color:'white',padding:40}}>{p.name}</h1>
                                         </div>
                                         <div className="card-block">

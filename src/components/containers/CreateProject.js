@@ -6,17 +6,18 @@ class CreateProject extends Component{
     constructor(props){
         super(props)
         this.state = {
-            name:'', description:''
+            name:'', description:'', color:'#80a7e5'
         }
     }
     createProject(){
-        const { name, description } = this.state
+        const { name, description, color } = this.state
         if( name == '' && description == '' ){
             throw 'error!'
         }
-        this.props.createProject({name, description, user_id: this.props.user.id, slug:name.split(' ').join('+')})
+        this.props.createProject({name, description, color,
+                                user_id: this.props.user.id, slug:name.split(' ').join('+')})
         .then(data => {
-            this.props.history.push('/')
+            this.props.history.push('/projects')
             return
         })
         .catch(err => {
@@ -35,6 +36,13 @@ class CreateProject extends Component{
                 <textarea className="form-control" cols="30" rows="10" placeholder="A Description would be nice"
                  onChange={e => this.setState({description: e.target.value})} ></textarea>
                 <br/>
+                <h4>Pick a Color for Your Projects Color:</h4>
+                <input type="color" onChange={e => this.setState({color: e.target.value})}/>
+                <hr />
+                    <div style={{ width:318, height:180, backgroundColor:this.state.color }}>
+                        <h1 className="text-center" style={{ color:'white' ,padding:40}}>{this.state.name}</h1>
+                    </div>
+                <hr />
                 <button className="btn btn-success btn-lg pull-right"
                         onClick={ this.createProject.bind(this) }>
                     Submit!

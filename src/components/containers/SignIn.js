@@ -14,7 +14,6 @@ class SignIn extends Component{
     }
     loginUser(){
         const { username, password } = this.state
-        console.log('user', this.state)
         this.props.signIn({username:username,password:password})
         .then(response => {
             this.props.history.push('/')
@@ -37,6 +36,7 @@ class SignIn extends Component{
                         </div> : null
                     }
                     <h1 className="topmargin-sm nobottommargin">Sign In!</h1>
+                    <hr/>
                     <input className="form-control" 
                         type="text" 
                         placeholder="username" 

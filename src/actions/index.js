@@ -42,9 +42,15 @@ export default {
 	},
 
 	createProject: params => {
-		return dispatch => {
-			return dispatch(TurboClient.postRequest('projects',params, constants.NEW_PROJECTS))
-		}
+			return dispatch => {
+				return dispatch(TurboClient.postRequest('projects',params, constants.NEW_PROJECTS))
+			}
+	},
+
+	getProjects: params => {
+			return dispatch => {
+				return dispatch(TurboClient.getRequest('projects',params, constants.GET_PROJECTS))
+			}
 	}
 	
 }

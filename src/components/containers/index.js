@@ -11,8 +11,9 @@ import CreateProject from './CreateProject'
 import NavBar 		 from './NavBar'
 import SignIn		 from './SignIn'
 import SignUp		 from './SignUp'
+import ProjectsList   from './ProjectsList'
 export {
 
-	Users, MainPage, CreateProject, NavBar, SignIn, SignUp
+	Users, MainPage, CreateProject, NavBar, SignIn, SignUp, ProjectsList
 	
 }

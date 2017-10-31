@@ -3,6 +3,7 @@ import { Link }             from 'react-router-dom'
 import { connect }          from 'react-redux'
 import actions              from '../../actions'
 
+
 class NavBar extends Component{
     constructor(props){
         super(props)
@@ -17,16 +18,15 @@ class NavBar extends Component{
                 <nav className="navbar navbar-inverse">
                     <div className="container-fluid">
                         <div className="navbar-header">
-                            <Link to="/" className="navbar-brand">TimeCard</Link>
-
+                            <li><Link className="navbar-brand" to="/">TimeCard</Link></li>
                         </div>
                         <ul className="nav navbar-nav">
                             {
                             this.props.user.id != ''  ? 
                                 <ul className="nav navbar-nav navbar-right">
+                                    <li><Link to="" onClick={this.logout.bind(this)} >Logout</Link></li>
+                                    <li><Link to="/projects">Projects</Link></li>
                                     <li><Link to="/new-project">New Project</Link></li>
-                                    <li><Link to="" >Logout</Link></li>
-                                    <li><a>{`Hey there ${this.props.user.username}`}</a></li>
                                 </ul> : 
                                 <ul className="nav navbar-nav navbar-right">
                                     <li><Link to="/signin">Sign In</Link></li>
@@ -36,6 +36,8 @@ class NavBar extends Component{
                         </ul>
                     </div>
                 </nav>
+
+                
 
 
             </div>

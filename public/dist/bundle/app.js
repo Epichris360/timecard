@@ -7044,6 +7044,79 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _constants = __webpack_require__(39);
+
+var _constants2 = _interopRequireDefault(_constants);
+
+var _utils = __webpack_require__(126);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * *
+	Here are a few sample actions for User managment.
+	Feel free to remove and replace with your own actions
+* * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*/
+
+exports.default = {
+
+	fetchUsers: function fetchUsers(params) {
+		return function (dispatch) {
+			return dispatch(_utils.TurboClient.getRequest('user', params, _constants2.default.USERS_RECEIVED));
+		};
+	},
+
+	addUser: function addUser(params) {
+		return function (dispatch) {
+			return dispatch(_utils.TurboClient.postRequest('user', params, _constants2.default.USER_CREATED));
+		};
+	},
+
+	// Unlike addUser, register() also maintains a session for login state. After calling 
+	// TurboClient.createUser(), the new user is logged in as well:
+	register: function register(params) {
+		return function (dispatch) {
+			return dispatch(_utils.TurboClient.createUser(params, _constants2.default.USER_CREATED));
+		};
+	},
+
+	loginUser: function loginUser(credentials) {
+		return function (dispatch) {
+			return dispatch(_utils.TurboClient.login(credentials, _constants2.default.CURRENT_USER_RECEIVED));
+		};
+	},
+
+	currentUser: function currentUser() {
+		return function (dispatch) {
+			return dispatch(_utils.TurboClient.currentUser(_constants2.default.CURRENT_USER_RECEIVED));
+		};
+	},
+
+	createProject: function createProject(params) {
+		return function (dispatch) {
+			return dispatch(_utils.TurboClient.postRequest('projects', params, _constants2.default.NEW_PROJECTS));
+		};
+	},
+
+	getProjects: function getProjects(params) {
+		return function (dispatch) {
+			return dispatch(_utils.TurboClient.getRequest('projects', params, _constants2.default.GET_PROJECTS));
+		};
+	}
+
+};
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 /*
 object-assign
 (c) Sindre Sorhus
@@ -7137,7 +7210,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7204,7 +7277,7 @@ var createPath = exports.createPath = function createPath(location) {
 };
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7272,73 +7345,6 @@ var createPath = function createPath(location) {
   if (hash && hash !== '#') path += hash.charAt(0) === '#' ? hash : '#' + hash;
 
   return path;
-};
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _constants = __webpack_require__(39);
-
-var _constants2 = _interopRequireDefault(_constants);
-
-var _utils = __webpack_require__(126);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * *
-	Here are a few sample actions for User managment.
-	Feel free to remove and replace with your own actions
-* * * * * * * * * * * * * * * * * * * * * * * * * * * *
-*/
-
-exports.default = {
-
-	fetchUsers: function fetchUsers(params) {
-		return function (dispatch) {
-			return dispatch(_utils.TurboClient.getRequest('user', params, _constants2.default.USERS_RECEIVED));
-		};
-	},
-
-	addUser: function addUser(params) {
-		return function (dispatch) {
-			return dispatch(_utils.TurboClient.postRequest('user', params, _constants2.default.USER_CREATED));
-		};
-	},
-
-	// Unlike addUser, register() also maintains a session for login state. After calling 
-	// TurboClient.createUser(), the new user is logged in as well:
-	register: function register(params) {
-		return function (dispatch) {
-			return dispatch(_utils.TurboClient.createUser(params, _constants2.default.USER_CREATED));
-		};
-	},
-
-	loginUser: function loginUser(credentials) {
-		return function (dispatch) {
-			return dispatch(_utils.TurboClient.login(credentials, _constants2.default.CURRENT_USER_RECEIVED));
-		};
-	},
-
-	currentUser: function currentUser() {
-		return function (dispatch) {
-			return dispatch(_utils.TurboClient.currentUser(_constants2.default.CURRENT_USER_RECEIVED));
-		};
-	},
-
-	createProject: function createProject(params) {
-		return function (dispatch) {
-			return dispatch(_utils.TurboClient.postRequest('projects', params, _constants2.default.NEW_PROJECTS));
-		};
-	}
-
 };
 
 /***/ }),
@@ -7470,7 +7476,7 @@ module.exports = g;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return locationsAreEqual; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_resolve_pathname__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_value_equal__ = __webpack_require__(47);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__PathUtils__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__PathUtils__ = __webpack_require__(13);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 
@@ -7782,7 +7788,7 @@ var _valueEqual = __webpack_require__(47);
 
 var _valueEqual2 = _interopRequireDefault(_valueEqual);
 
-var _PathUtils = __webpack_require__(11);
+var _PathUtils = __webpack_require__(12);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -8897,7 +8903,8 @@ exports.default = {
 	USER_LOGGED_IN: 'USER_LOGGED_IN',
 	CURRENT_USER_RECEIVED: 'CURRENT_USER_RECEIVED',
 
-	NEW_PROJECTS: 'NEW_PROJECTS'
+	NEW_PROJECTS: 'NEW_PROJECTS',
+	GET_PROJECTS: 'GET_PROJECTS'
 
 };
 
@@ -10048,6 +10055,7 @@ var app = _react2.default.createElement(
 					null,
 					_react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _containers.MainPage }),
 					_react2.default.createElement(_reactRouterDom.Route, { path: '/new-project', component: _containers.CreateProject }),
+					_react2.default.createElement(_reactRouterDom.Route, { path: '/projects', component: _containers.ProjectsList }),
 					_react2.default.createElement(_reactRouterDom.Route, { path: '/signin', component: _containers.SignIn }),
 					_react2.default.createElement(_reactRouterDom.Route, { path: '/signup', component: _containers.SignUp })
 				)
@@ -10072,7 +10080,7 @@ _reactDom2.default.render(app, document.getElementById('root'));
  This source code is licensed under the MIT license found in the
  LICENSE file in the root directory of this source tree.
 */
-var f=__webpack_require__(10),p=__webpack_require__(14);__webpack_require__(8);var r=__webpack_require__(7);
+var f=__webpack_require__(11),p=__webpack_require__(14);__webpack_require__(8);var r=__webpack_require__(7);
 function t(a){for(var b=arguments.length-1,d="Minified React error #"+a+"; visit http://facebook.github.io/react/docs/error-decoder.html?invariant\x3d"+a,e=0;e<b;e++)d+="\x26args[]\x3d"+encodeURIComponent(arguments[e+1]);b=Error(d+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings.");b.name="Invariant Violation";b.framesToPop=1;throw b;}
 var u={isMounted:function(){return!1},enqueueForceUpdate:function(){},enqueueReplaceState:function(){},enqueueSetState:function(){}};function v(a,b,d){this.props=a;this.context=b;this.refs=p;this.updater=d||u}v.prototype.isReactComponent={};v.prototype.setState=function(a,b){"object"!==typeof a&&"function"!==typeof a&&null!=a?t("85"):void 0;this.updater.enqueueSetState(this,a,b,"setState")};v.prototype.forceUpdate=function(a){this.updater.enqueueForceUpdate(this,a,"forceUpdate")};
 function w(a,b,d){this.props=a;this.context=b;this.refs=p;this.updater=d||u}function x(){}x.prototype=v.prototype;var y=w.prototype=new x;y.constructor=w;f(y,v.prototype);y.isPureReactComponent=!0;function z(a,b,d){this.props=a;this.context=b;this.refs=p;this.updater=d||u}var A=z.prototype=new x;A.constructor=z;f(A,v.prototype);A.unstable_isAsyncReactComponent=!0;A.render=function(){return this.props.children};
@@ -10109,7 +10117,7 @@ if (process.env.NODE_ENV !== "production") {
 
 'use strict';
 
-var objectAssign$1 = __webpack_require__(10);
+var objectAssign$1 = __webpack_require__(11);
 var require$$0 = __webpack_require__(15);
 var emptyObject = __webpack_require__(14);
 var invariant = __webpack_require__(8);
@@ -11855,7 +11863,7 @@ if (process.env.NODE_ENV === 'production') {
  LICENSE file in the root directory of this source tree.
  Modernizr 3.0.0pre (Custom Build) | MIT
 */
-var aa=__webpack_require__(0);__webpack_require__(8);var l=__webpack_require__(20),n=__webpack_require__(10),ba=__webpack_require__(29),ca=__webpack_require__(7),da=__webpack_require__(14),ea=__webpack_require__(30),fa=__webpack_require__(31),ha=__webpack_require__(32),ia=__webpack_require__(33);
+var aa=__webpack_require__(0);__webpack_require__(8);var l=__webpack_require__(20),n=__webpack_require__(11),ba=__webpack_require__(29),ca=__webpack_require__(7),da=__webpack_require__(14),ea=__webpack_require__(30),fa=__webpack_require__(31),ha=__webpack_require__(32),ia=__webpack_require__(33);
 function w(a){for(var b=arguments.length-1,c="Minified React error #"+a+"; visit http://facebook.github.io/react/docs/error-decoder.html?invariant\x3d"+a,d=0;d<b;d++)c+="\x26args[]\x3d"+encodeURIComponent(arguments[d+1]);b=Error(c+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings.");b.name="Invariant Violation";b.framesToPop=1;throw b;}aa?void 0:w("227");
 function ja(a){switch(a){case "svg":return"http://www.w3.org/2000/svg";case "math":return"http://www.w3.org/1998/Math/MathML";default:return"http://www.w3.org/1999/xhtml"}}
 var ka={Namespaces:{html:"http://www.w3.org/1999/xhtml",mathml:"http://www.w3.org/1998/Math/MathML",svg:"http://www.w3.org/2000/svg"},getIntrinsicNamespace:ja,getChildNamespace:function(a,b){return null==a||"http://www.w3.org/1999/xhtml"===a?ja(b):"http://www.w3.org/2000/svg"===a&&"foreignObject"===b?"http://www.w3.org/1999/xhtml":a}},la=null,oa={};
@@ -12183,7 +12191,7 @@ if (process.env.NODE_ENV !== "production") {
 var react = __webpack_require__(0);
 var invariant = __webpack_require__(8);
 var ExecutionEnvironment = __webpack_require__(20);
-var _assign = __webpack_require__(10);
+var _assign = __webpack_require__(11);
 var EventListener = __webpack_require__(29);
 var require$$0 = __webpack_require__(15);
 var hyphenateStyleName = __webpack_require__(63);
@@ -29624,7 +29632,7 @@ module.exports = performance || {};
 var emptyFunction = __webpack_require__(7);
 var invariant = __webpack_require__(8);
 var warning = __webpack_require__(15);
-var assign = __webpack_require__(10);
+var assign = __webpack_require__(11);
 
 var ReactPropTypesSecret = __webpack_require__(19);
 var checkPropTypes = __webpack_require__(18);
@@ -31620,7 +31628,7 @@ var _invariant2 = _interopRequireDefault(_invariant);
 
 var _LocationUtils = __webpack_require__(23);
 
-var _PathUtils = __webpack_require__(11);
+var _PathUtils = __webpack_require__(12);
 
 var _createTransitionManager = __webpack_require__(24);
 
@@ -31997,7 +32005,7 @@ var _invariant2 = _interopRequireDefault(_invariant);
 
 var _LocationUtils = __webpack_require__(23);
 
-var _PathUtils = __webpack_require__(11);
+var _PathUtils = __webpack_require__(12);
 
 var _createTransitionManager = __webpack_require__(24);
 
@@ -32401,7 +32409,7 @@ var _warning = __webpack_require__(2);
 
 var _warning2 = _interopRequireDefault(_warning);
 
-var _PathUtils = __webpack_require__(11);
+var _PathUtils = __webpack_require__(12);
 
 var _LocationUtils = __webpack_require__(23);
 
@@ -33317,7 +33325,7 @@ Redirect.contextTypes = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__LocationUtils__ = __webpack_require__(17);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_3__LocationUtils__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_3__LocationUtils__["b"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__PathUtils__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__PathUtils__ = __webpack_require__(13);
 /* unused harmony reexport parsePath */
 /* unused harmony reexport createPath */
 
@@ -33340,7 +33348,7 @@ Redirect.contextTypes = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_invariant__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_invariant___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_invariant__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__LocationUtils__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__PathUtils__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__PathUtils__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__createTransitionManager__ = __webpack_require__(28);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__DOMUtils__ = __webpack_require__(52);
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -33644,7 +33652,7 @@ var createBrowserHistory = function createBrowserHistory() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_invariant__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_invariant___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_invariant__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__LocationUtils__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__PathUtils__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__PathUtils__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__createTransitionManager__ = __webpack_require__(28);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__DOMUtils__ = __webpack_require__(52);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -33962,7 +33970,7 @@ var createHashHistory = function createHashHistory() {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_warning__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_warning___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_warning__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__PathUtils__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__PathUtils__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__LocationUtils__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__createTransitionManager__ = __webpack_require__(28);
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -34147,7 +34155,7 @@ var createMemoryHistory = function createMemoryHistory() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_prop_types__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_prop_types__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_history_PathUtils__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_history_PathUtils__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_history_PathUtils___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_history_PathUtils__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Router__ = __webpack_require__(26);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -34499,7 +34507,7 @@ var withRouter = function withRouter(Component) {
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.SignUp = exports.SignIn = exports.NavBar = exports.CreateProject = exports.MainPage = exports.Users = undefined;
+exports.ProjectsList = exports.SignUp = exports.SignIn = exports.NavBar = exports.CreateProject = exports.MainPage = exports.Users = undefined;
 
 var _Users = __webpack_require__(125);
 
@@ -34525,14 +34533,11 @@ var _SignUp = __webpack_require__(148);
 
 var _SignUp2 = _interopRequireDefault(_SignUp);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _ProjectsList = __webpack_require__(149);
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * *
-	Export your container components here. The Users
-	container is just an example and you will likely
-	remove it in favor of your own containers. 
-* * * * * * * * * * * * * * * * * * * * * * * * * * * *
-*/
+var _ProjectsList2 = _interopRequireDefault(_ProjectsList);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.Users = _Users2.default;
 exports.MainPage = _MainPage2.default;
@@ -34540,6 +34545,12 @@ exports.CreateProject = _CreateProject2.default;
 exports.NavBar = _NavBar2.default;
 exports.SignIn = _SignIn2.default;
 exports.SignUp = _SignUp2.default;
+exports.ProjectsList = _ProjectsList2.default; /* * * * * * * * * * * * * * * * * * * * * * * * * * *
+                                               	Export your container components here. The Users
+                                               	container is just an example and you will likely
+                                               	remove it in favor of your own containers. 
+                                               * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                                               */
 
 /***/ }),
 /* 125 */
@@ -34560,7 +34571,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(9);
 
-var _actions = __webpack_require__(13);
+var _actions = __webpack_require__(10);
 
 var _actions2 = _interopRequireDefault(_actions);
 
@@ -36470,7 +36481,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(9);
 
-var _actions = __webpack_require__(13);
+var _actions = __webpack_require__(10);
 
 var _actions2 = _interopRequireDefault(_actions);
 
@@ -36601,7 +36612,7 @@ var _reactRouterDom = __webpack_require__(45);
 
 var _reactRedux = __webpack_require__(9);
 
-var _actions = __webpack_require__(13);
+var _actions = __webpack_require__(10);
 
 var _actions2 = _interopRequireDefault(_actions);
 
@@ -36644,9 +36655,13 @@ var NavBar = function (_Component) {
                             'div',
                             { className: 'navbar-header' },
                             _react2.default.createElement(
-                                _reactRouterDom.Link,
-                                { to: '/', className: 'navbar-brand' },
-                                'TimeCard'
+                                'li',
+                                null,
+                                _react2.default.createElement(
+                                    _reactRouterDom.Link,
+                                    { className: 'navbar-brand', to: '/' },
+                                    'TimeCard'
+                                )
                             )
                         ),
                         _react2.default.createElement(
@@ -36660,16 +36675,7 @@ var NavBar = function (_Component) {
                                     null,
                                     _react2.default.createElement(
                                         _reactRouterDom.Link,
-                                        { to: '/new-project' },
-                                        'New Project'
-                                    )
-                                ),
-                                _react2.default.createElement(
-                                    'li',
-                                    null,
-                                    _react2.default.createElement(
-                                        _reactRouterDom.Link,
-                                        { to: '' },
+                                        { to: '', onClick: this.logout.bind(this) },
                                         'Logout'
                                     )
                                 ),
@@ -36677,9 +36683,18 @@ var NavBar = function (_Component) {
                                     'li',
                                     null,
                                     _react2.default.createElement(
-                                        'a',
-                                        null,
-                                        'Hey there ' + this.props.user.username
+                                        _reactRouterDom.Link,
+                                        { to: '/projects' },
+                                        'Projects'
+                                    )
+                                ),
+                                _react2.default.createElement(
+                                    'li',
+                                    null,
+                                    _react2.default.createElement(
+                                        _reactRouterDom.Link,
+                                        { to: '/new-project' },
+                                        'New Project'
                                     )
                                 )
                             ) : _react2.default.createElement(
@@ -36751,7 +36766,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(9);
 
-var _actions = __webpack_require__(13);
+var _actions = __webpack_require__(10);
 
 var _actions2 = _interopRequireDefault(_actions);
 
@@ -36789,7 +36804,6 @@ var SignIn = function (_Component) {
                 username = _state.username,
                 password = _state.password;
 
-            console.log('user', this.state);
             this.props.signIn({ username: username, password: password }).then(function (response) {
                 _this2.props.history.push('/');
                 return;
@@ -36826,6 +36840,7 @@ var SignIn = function (_Component) {
                         { className: 'topmargin-sm nobottommargin' },
                         'Sign In!'
                     ),
+                    _react2.default.createElement('hr', null),
                     _react2.default.createElement('input', { className: 'form-control',
                         type: 'text',
                         placeholder: 'username',
@@ -36893,7 +36908,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(9);
 
-var _actions = __webpack_require__(13);
+var _actions = __webpack_require__(10);
 
 var _actions2 = _interopRequireDefault(_actions);
 
@@ -37066,6 +37081,131 @@ var dispatchToProps = function dispatchToProps(dispatch) {
 };
 
 exports.default = (0, _reactRedux.connect)(null, dispatchToProps)(SignUp);
+
+/***/ }),
+/* 149 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(9);
+
+var _actions = __webpack_require__(10);
+
+var _actions2 = _interopRequireDefault(_actions);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ProjectsList = function (_Component) {
+    _inherits(ProjectsList, _Component);
+
+    function ProjectsList(props) {
+        _classCallCheck(this, ProjectsList);
+
+        var _this = _possibleConstructorReturn(this, (ProjectsList.__proto__ || Object.getPrototypeOf(ProjectsList)).call(this, props));
+
+        _this.state = {
+            projects: [], loading: true
+        };
+        return _this;
+    }
+
+    _createClass(ProjectsList, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var _this2 = this;
+
+            this.props.getProjects({ user_id: this.props.user.id }).then(function (data) {
+                console.log('data', data);
+                _this2.setState({ projects: data, loading: false });
+            }).catch(function (err) {
+                console.log('err', err.message);
+            });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                null,
+                'My Projects:',
+                _react2.default.createElement('hr', null),
+                this.state.loading ? _react2.default.createElement(
+                    'h1',
+                    null,
+                    'Loading.....'
+                ) : _react2.default.createElement(
+                    'div',
+                    null,
+                    this.state.projects.map(function (p, i) {
+                        return _react2.default.createElement(
+                            'div',
+                            { key: i, className: 'card', style: { width: '340px', padding: '10px', border: '1px solid black' } },
+                            _react2.default.createElement('img', { className: 'card-img-top', src: 'http://via.placeholder.com/318x180?text=' + p.name.split(' ').join('+'), alt: 'Card image cap' }),
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'card-block' },
+                                _react2.default.createElement(
+                                    'h4',
+                                    { className: 'card-title' },
+                                    'Card title'
+                                ),
+                                _react2.default.createElement(
+                                    'p',
+                                    { className: 'card-text' },
+                                    'Some quick example text to build on the card title and make up the bulk of the card\'s content.'
+                                ),
+                                _react2.default.createElement(
+                                    'a',
+                                    { href: '#', className: 'btn btn-primary' },
+                                    'Go somewhere'
+                                )
+                            )
+                        );
+                    })
+                ),
+                _react2.default.createElement('br', null)
+            );
+        }
+    }]);
+
+    return ProjectsList;
+}(_react.Component);
+
+var mapStateToProps = function mapStateToProps(state) {
+    var user = state.user;
+
+    return {
+        user: user
+    };
+};
+
+var dispatchToProps = function dispatchToProps(dispatch) {
+    return {
+        getProjects: function getProjects(params) {
+            return dispatch(_actions2.default.getProjects(params));
+        }
+    };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, dispatchToProps)(ProjectsList);
 
 /***/ })
 ],[55]);

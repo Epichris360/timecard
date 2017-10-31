@@ -24,6 +24,7 @@
     "redux-thunk": "latest",
     "superagent": "latest",
     "turbo360": "latest",
+    "uuid": "^3.1.0",
     "vertex360": "latest"
   },
   "devDependencies": {

@@ -51,6 +51,12 @@ export default {
 			return dispatch => {
 				return dispatch(TurboClient.getRequest('projects',params, constants.GET_PROJECTS))
 			}
+	},
+
+	updateProject: (orig, updated) => {
+		return dispatch => {
+			return dispatch(TurboClient.putRequest('projects', orig, updated, constants.UPDATE_PROJECT))
+		}
 	}
 	
 }

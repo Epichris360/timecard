@@ -14,8 +14,7 @@ class CreateProject extends Component{
         if( name == '' && description == '' ){
             throw 'error!'
         }
-        this.props.createProject({name, description, color,
-                                user_id: this.props.user.id, slug:name.split(' ').join('+')})
+        this.props.createProject({name, description, color,user_id: this.props.user.id, slug:name.split(' ').join('+'),tasks:[]})
         .then(data => {
             this.props.history.push('/projects')
             return

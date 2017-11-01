@@ -3,6 +3,7 @@ import constants from '../constants'
 const initialState = []
 
 export default (state = initialState, action) => {
+    
     let newState 
 	switch (action.type) {
 
@@ -15,9 +16,9 @@ export default (state = initialState, action) => {
             return newState
 
         case constants.UPDATE_PROJECT:
-        return state.map(
-            p => project(p,action)
-        )
+            return state.map(
+                p => project(p,action)
+            )
             
 		default:
 			return state
@@ -26,13 +27,13 @@ export default (state = initialState, action) => {
 
 const project = ( state = {}, action ) =>{
     
-        switch (action.type) {
-            
-            case constants.UPDATE_PROJECT:
-                return (state.id == action.data.id) ?
-                    action.data : state
-                    
-            default:
-                return state
-        }
+    switch (action.type) {
+
+        case constants.UPDATE_PROJECT:
+            return (state.task_id == action.data.task_id) ?
+                action.data : state
+                
+        default:
+            return state
     }
+}

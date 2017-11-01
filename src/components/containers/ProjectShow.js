@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect }          from  'react-redux'
 import { v4 }               from 'uuid'
 import actions              from '../../actions'
+import { Accordion, Panel } from 'react-bootstrap'
 
 class ProjectShow extends Component{
     constructor(props){
@@ -16,15 +17,56 @@ class ProjectShow extends Component{
         this.setState({projectOrig:project, projectChange:project, loading:false})
     }
     submitTask(){
+        //times: { times_id: v4(), start: new Date().toString(), end:'', name:'' }
         let { projectChange, projectOrig } = this.state
-        projectChange.tasks.push({task_id: v4(), name:this.state.newTask, times:[]})
+        projectChange.tasks.push( {task_id: v4(), name:this.state.newTask, times:[], totalTime:0} )
         this.props.updateProject(projectOrig, projectChange)
         .then(data => {
-            this.setState({ newTask:'', projectChange })
+            this.setState({ newTask:'', projectChange, projectOrig: projectChange })
         })
         .catch(err => {
             console.log('err',err.message)
         })
+    }
+    start(t){
+        const time = { time_id:v4(), start:new Date().toString(), end:'' }
+        let { projectChange, projectOrig } = this.state
+        const newProjectChange = projectChange.tasks.map( task => {
+            return(
+                task.id == t.id ? this.timeStart(t,time) : task
+            )
+        })
+        this.props.updateProject(projectOrig, newProjectChange)
+        .then(data => {
+            this.setState({projectChange: newProjectChange, projectOrig: newProjectChange})
+        })
+        .catch(err => {
+            console.log('err',err.message)
+        })
+        
+    }
+    timeStart(t, time){
+        t.times.push(time)
+        return t
+    }
+    end(t){
+        t.times[0].end = new Date().toString()
+        let { projectChange, projectOrig } = this.state
+        const total = Math.ceil( ( t.times[0].start.getTime() - t.times[0].end.getTime() ) / 60000 )
+        t.totalTime = total
+        const newProjectChange = projectChange.tasks.map( task => {
+            return(
+                task.id == t.id ? t : task
+            )
+        })
+        this.props.updateProject(projectOrig, newProjectChange)
+        .then(data => {
+            this.setState({projectChange: newProjectChange, projectOrig: newProjectChange})
+        })
+        .catch(err => {
+            console.log('err',err.message)
+        })
+        
     }
     render(){
         return(
@@ -48,15 +90,25 @@ class ProjectShow extends Component{
                         </div>
                         <hr/>
                         <h4>Tasks:</h4>
-                        <ul className="list-group">
+                        
+                        <Accordion>
                             {
                                 this.state.projectChange.tasks.map( (t,i) => {
                                     return(
-                                        <li className="list-group-item">{ t.name }<span class="badge">{ t.times.length }</span></li>
+                                        <Panel header={ `Task: ${t.name} | Total Time: ${t.totalTime}` } eventKey={i} key={i}>
+                                            {
+                                                t.times.length == 0 || t.times[0].start == '' ?
+                                                    <button onClick={ this.start.bind(this, t) }
+                                                    className="btn btn-success">Start</button> : 
+
+                                                    <button onClick={ this.start.bind(this, t) }
+                                                    className="btn btn-success">End</button>
+                                            }
+                                        </Panel>
                                     )
                                 })
                             }
-                        </ul>
+                        </Accordion>
                     </div>
                 }
             </div>

@@ -45,6 +45,24 @@ module.exports = {
 		return function (dispatch) {
 			return dispatch(TurboClient.currentUser(constants.CURRENT_USER_RECEIVED));
 		};
+	},
+
+	createProject: function (params) {
+		return function (dispatch) {
+			return dispatch(TurboClient.postRequest("projects", params, constants.NEW_PROJECT));
+		};
+	},
+
+	getProjects: function (params) {
+		return function (dispatch) {
+			return dispatch(TurboClient.getRequest("projects", params, constants.GET_PROJECTS));
+		};
+	},
+
+	updateProject: function (orig, updated) {
+		return function (dispatch) {
+			return dispatch(TurboClient.putRequest("projects", orig, updated, constants.UPDATE_PROJECT));
+		};
 	}
 
 };

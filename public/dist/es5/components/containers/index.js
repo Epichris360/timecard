@@ -25,6 +25,8 @@ var ProjectsList = _interopRequire(require("./ProjectsList"));
 
 var ProjectShow = _interopRequire(require("./ProjectShow"));
 
+var Loader = _interopRequire(require("./Loader"));
+
 exports.Users = Users;
 exports.MainPage = MainPage;
 exports.CreateProject = CreateProject;
@@ -33,6 +35,7 @@ exports.SignIn = SignIn;
 exports.SignUp = SignUp;
 exports.ProjectsList = ProjectsList;
 exports.ProjectShow = ProjectShow;
+exports.Loader = Loader;
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });

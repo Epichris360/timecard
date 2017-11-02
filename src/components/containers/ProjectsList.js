@@ -27,7 +27,7 @@ class ProjectsList extends Component{
                 <h1>My Projects:</h1>
                 <hr/>
                 {
-                    this.state.loading ? <h1>Loading....</h1>  :
+                    this.state.loading ? <Loader />  :
                     <div className="row">
                         {
                             this.props.projects.map( (p,i) => {
@@ -48,10 +48,12 @@ class ProjectsList extends Component{
                     </div>
                 }
                 <br/>
+                {/*
+                    <button onClick={() => console.log('this.props.projects',this.props.projects)}>
+                        this.props.projects
+                    </button>
+                */}
                 
-                <button onClick={() => console.log('this.props.projects',this.props.projects)}>
-                    this.props.projects
-                </button>
             </div>
         )
     }

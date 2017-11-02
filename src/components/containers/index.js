@@ -13,8 +13,11 @@ import SignIn		 from './SignIn'
 import SignUp		 from './SignUp'
 import ProjectsList  from './ProjectsList'
 import ProjectShow   from './ProjectShow'
+import Loader		 from './Loader'
+
 export {
 
-	Users, MainPage, CreateProject, NavBar, SignIn, SignUp, ProjectsList, ProjectShow
+	Users, MainPage, CreateProject, NavBar, SignIn, SignUp, ProjectsList, ProjectShow,
+	Loader
 	
 }

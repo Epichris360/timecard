@@ -4,7 +4,7 @@ import store from './stores'
 import { Provider } from 'react-redux'
 import { Switch, BrowserRouter as Router, Route  } from 'react-router-dom'
 import { MainPage, CreateProject, NavBar, 
-		SignIn, SignUp, ProjectsList, ProjectShow } from './components/containers'
+		SignIn, SignUp, ProjectsList, ProjectShow, Loader } from './components/containers'
 
 const app = (
 	<Provider store={store.configure(null)}>
@@ -13,11 +13,11 @@ const app = (
 				<NavBar />
 				<div className="container">
 					<Switch>
-						<Route exact path='/' 	   component={MainPage} />
-						<Route path="/new-project" component={CreateProject} />
-						<Route path="/projects"    component={ProjectsList} />
-						<Route path="/signin"      component={SignIn} />
-						<Route path="/signup"      component={SignUp}/>
+						<Route exact path='/' 	     component={MainPage} />
+						<Route path="/new-project"   component={CreateProject} />
+						<Route path="/projects"      component={ProjectsList} />
+						<Route path="/signin"        component={SignIn} />
+						<Route path="/signup"        component={SignUp}/>
 						<Route path="/project/:slug" component={ProjectShow} />
 					</Switch>
 				</div>

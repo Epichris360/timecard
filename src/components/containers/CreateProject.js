@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import actions from '../../actions'
+import { connect }          from 'react-redux'
+import actions              from '../../actions'
+import Loader               from './Loader'
 
 class CreateProject extends Component{
     constructor(props){
         super(props)
         this.state = {
-            name:'', description:'', color:'#80a7e5'
+            name:'', description:'', color:'#80a7e5', submitted:false
         }
     }
     createProject(){
@@ -14,8 +15,10 @@ class CreateProject extends Component{
         if( name == '' && description == '' ){
             throw 'error!'
         }
+
         this.props.createProject({name, description, color,user_id: this.props.user.id, slug:name.split(' ').join('+'),tasks:[]})
         .then(data => {
+            this.setState({submitted:true})
             this.props.history.push('/projects')
             return
         })
@@ -25,7 +28,7 @@ class CreateProject extends Component{
     }
     render(){
         return(
-            <div className="container">
+            <div className="container" style={{paddingBottom:'20px'}}>
                 <h1>Create a New Project to Track!</h1>
                 <hr/>
                 <label htmlFor="">Name of the Project:</label>
@@ -42,10 +45,13 @@ class CreateProject extends Component{
                         <h1 className="text-center" style={{ color:'white' ,padding:40}}>{this.state.name}</h1>
                     </div>
                 <hr />
-                <button className="btn btn-success btn-lg pull-right"
+                {
+                    this.state.submitted ? <Loader /> :
+                    <button className="btn btn-success btn-lg pull-right"
                         onClick={ this.createProject.bind(this) }>
-                    Submit!
-                </button>
+                        Submit!
+                    </button>
+                }
             </div>
         )
     }

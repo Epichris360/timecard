@@ -111,7 +111,7 @@ class ProjectShow extends Component{
         return(
             <div>
                 {
-                    this.state.loading ? <h1>Loading....</h1> :
+                    this.state.loading ? <Loader /> :
                     <div>
                         <h1>{this.state.projectChange.name}</h1>
                         <hr/>

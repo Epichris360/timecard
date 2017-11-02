@@ -5,6 +5,8 @@ import actions              from '../../actions'
 import { Accordion, Panel } from 'react-bootstrap'
 import Loader               from './Loader'
 
+let totalTimeTemp = 0
+
 class ProjectShow extends Component{
     constructor(props){
         super(props)
@@ -29,48 +31,46 @@ class ProjectShow extends Component{
             console.log('err',err.message)
         })
     }
-    start(t, time){
-        //completly re work this!
-        console.log('t, time',t,time)
+    updateBlockTime(task, time,which){
+        //which can be start or end
         let { projectChange, projectOrig } = this.state
-        /*const newTimes = projectChange.times.map( time => {
-            console.log('')
+        const newTasks = projectChange.tasks.map( tk => {
             return(
-                time.time_id == t.time_id ? this.timesNew(t,time) : time
+                tk.task_id == task.task_id ? this.timesArray(task, time, which) : task
             )
         })
-        projectChange.times = newTimes*/
-        
-        /*this.props.updateProject(projectOrig, newProjectChange)
+        projectChange.tasks = newTasks
+        this.props.updateProject(projectOrig, projectChange)
         .then(data => {
-            console.log('data',data)
-            this.setState({projectChange: newProjectChange, projectOrig: newProjectChange})
+            this.setState({projectChange: projectChange, projectOrig: projectChange})
         })
         .catch(err => {
             console.log('err',err.message)
-        })*/
+        })
     }
-    timesNew(t, time){
-        
-    }
-    end(t){
-        /*t.times[0].end = new Date()
-        let { projectChange, projectOrig } = this.state
-        const total = Math.ceil( ( t.times[0].start.getTime() - t.times[0].end.getTime() ) / 60000 )
-        t.totalTime = total
-        const newProjectChange = projectChange.tasks.map( task => {
-            return(
-                task.id == t.id ? t : task
+    timesArray(task, time, which){
+        let newTimes = task.times.map( tm => {
+            return (
+                time.time_id == tm.time_id ? this.updateTime(time, which) : tm
             )
         })
-        this.props.updateProject(projectOrig, newProjectChange)
-        .then(data => {
-            this.setState({projectChange: newProjectChange, projectOrig: newProjectChange})
-        })
-        .catch(err => {
-            console.log('err',err.message)
-        })*/
-        
+        task.times = newTimes
+        task.totalTime = task.totalTime + totalTimeTemp
+        totalTimeTemp = 0
+        return task
+    }
+    updateTime(time,which){
+        if(which == 'start'){
+            time.start = new Date()
+        }else if(which == 'end'){
+            time.end = new Date()
+            var diff = Math.abs(new Date(time.start) - new Date(time.end))
+            var minutes = Math.floor((diff/1000)/60);
+            console.log('minutes',minutes)
+            totalTimeTemp = minutes
+            console.log('minutes!!!!',totalTimeTemp)
+        }
+        return time
     }
     deleteTasks(){
         let { projectChange, projectOrig } = this.state
@@ -89,13 +89,13 @@ class ProjectShow extends Component{
     createTaskBlock(t){
         const time = { time_id:v4(),name:this.state.blockName , start:'', end:'' }
         let { projectChange, projectOrig } = this.state
-        const newProjectChange = projectChange.tasks.map( task => {
+        const newTasks = projectChange.tasks.map( task => {
             return(
                 task.id == t.id ? this.timeStart(t,time) : task
             )
         })
-        projectChange.tasks = newProjectChange
-        this.props.updateProject(projectOrig, newProjectChange)
+        projectChange.tasks = newTasks
+        this.props.updateProject(projectOrig, projectChange)
         .then(data => {
             this.setState({projectChange: projectChange, projectOrig: projectChange, blockName:''})
         })
@@ -150,14 +150,14 @@ class ProjectShow extends Component{
                                                                 <span>{time.name}</span>
                                                                 {
                                                                     time.start == '' ? 
-                                                                    <button onClick={ this.start.bind(this ,t ,time) }
+                                                                    <button onClick={ this.updateBlockTime.bind(this ,t ,time, 'start') }
                                                                         style={{width:'150px'}}
                                                                         className="btn btn-success btn-xs pull-right">Start
                                                                     </button> : 
-                                                                    <button onClick={ this.end.bind(this ,t ,time) }
+                                                                    <button onClick={ this.updateBlockTime.bind(this ,t ,time, 'end') }
                                                                         style={{width:'150px'}}
                                                                         className="btn btn-success btn-xs pull-right">End
-                                                                    </button>
+                                                                    </button> 
                                                                 }
                                                             </li>
                                                         )

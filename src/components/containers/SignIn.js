@@ -20,6 +20,7 @@ class SignIn extends Component{
             return
         })
         .catch(err => {
+            console.log('err',err,message)
             this.setState({error: true})
             this.setState({errorMessage: 'Please Check Your Info!'})
             return

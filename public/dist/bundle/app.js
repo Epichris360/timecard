@@ -44336,6 +44336,7 @@ var SignIn = function (_Component) {
                 _this2.props.history.push('/');
                 return;
             }).catch(function (err) {
+                console.log('err', err, message);
                 _this2.setState({ error: true });
                 _this2.setState({ errorMessage: 'Please Check Your Info!' });
                 return;
@@ -44801,6 +44802,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var totalTimeTemp = 0;
+
 var ProjectShow = function (_Component) {
     _inherits(ProjectShow, _Component);
 
@@ -44844,58 +44847,57 @@ var ProjectShow = function (_Component) {
             });
         }
     }, {
-        key: 'start',
-        value: function start(t, time) {
-            //completly re work this!
-            console.log('t, time', t, time);
+        key: 'updateBlockTime',
+        value: function updateBlockTime(task, time, which) {
+            var _this4 = this;
+
+            //which can be start or end
             var _state2 = this.state,
                 projectChange = _state2.projectChange,
                 projectOrig = _state2.projectOrig;
-            /*const newTimes = projectChange.times.map( time => {
-                console.log('')
-                return(
-                    time.time_id == t.time_id ? this.timesNew(t,time) : time
-                )
-            })
-            projectChange.times = newTimes*/
 
-            /*this.props.updateProject(projectOrig, newProjectChange)
-            .then(data => {
-                console.log('data',data)
-                this.setState({projectChange: newProjectChange, projectOrig: newProjectChange})
-            })
-            .catch(err => {
-                console.log('err',err.message)
-            })*/
+            var newTasks = projectChange.tasks.map(function (tk) {
+                return tk.task_id == task.task_id ? _this4.timesArray(task, time, which) : task;
+            });
+            projectChange.tasks = newTasks;
+            this.props.updateProject(projectOrig, projectChange).then(function (data) {
+                _this4.setState({ projectChange: projectChange, projectOrig: projectChange });
+            }).catch(function (err) {
+                console.log('err', err.message);
+            });
         }
     }, {
-        key: 'timesNew',
-        value: function timesNew(t, time) {}
-    }, {
-        key: 'end',
-        value: function end(t) {
-            /*t.times[0].end = new Date()
-            let { projectChange, projectOrig } = this.state
-            const total = Math.ceil( ( t.times[0].start.getTime() - t.times[0].end.getTime() ) / 60000 )
-            t.totalTime = total
-            const newProjectChange = projectChange.tasks.map( task => {
-                return(
-                    task.id == t.id ? t : task
-                )
-            })
-            this.props.updateProject(projectOrig, newProjectChange)
-            .then(data => {
-                this.setState({projectChange: newProjectChange, projectOrig: newProjectChange})
-            })
-            .catch(err => {
-                console.log('err',err.message)
-            })*/
+        key: 'timesArray',
+        value: function timesArray(task, time, which) {
+            var _this5 = this;
 
+            var newTimes = task.times.map(function (tm) {
+                return time.time_id == tm.time_id ? _this5.updateTime(time, which) : tm;
+            });
+            task.times = newTimes;
+            task.totalTime = task.totalTime + totalTimeTemp;
+            totalTimeTemp = 0;
+            return task;
+        }
+    }, {
+        key: 'updateTime',
+        value: function updateTime(time, which) {
+            if (which == 'start') {
+                time.start = new Date();
+            } else if (which == 'end') {
+                time.end = new Date();
+                var diff = Math.abs(new Date(time.start) - new Date(time.end));
+                var minutes = Math.floor(diff / 1000 / 60);
+                console.log('minutes', minutes);
+                totalTimeTemp = minutes;
+                console.log('minutes!!!!', totalTimeTemp);
+            }
+            return time;
         }
     }, {
         key: 'deleteTasks',
         value: function deleteTasks() {
-            var _this4 = this;
+            var _this6 = this;
 
             var _state3 = this.state,
                 projectChange = _state3.projectChange,
@@ -44906,7 +44908,7 @@ var ProjectShow = function (_Component) {
             console.log('projectChange', projectChange);
             this.props.updateProject(projectOrig, projectChange).then(function (data) {
                 console.log('done!');
-                _this4.setState({ projectChange: projectChange, projectOrig: projectChange });
+                _this6.setState({ projectChange: projectChange, projectOrig: projectChange });
             }).catch(function (err) {
                 console.log('err', err.message);
             });
@@ -44914,19 +44916,19 @@ var ProjectShow = function (_Component) {
     }, {
         key: 'createTaskBlock',
         value: function createTaskBlock(t) {
-            var _this5 = this;
+            var _this7 = this;
 
             var time = { time_id: (0, _uuid.v4)(), name: this.state.blockName, start: '', end: '' };
             var _state4 = this.state,
                 projectChange = _state4.projectChange,
                 projectOrig = _state4.projectOrig;
 
-            var newProjectChange = projectChange.tasks.map(function (task) {
-                return task.id == t.id ? _this5.timeStart(t, time) : task;
+            var newTasks = projectChange.tasks.map(function (task) {
+                return task.id == t.id ? _this7.timeStart(t, time) : task;
             });
-            projectChange.tasks = newProjectChange;
-            this.props.updateProject(projectOrig, newProjectChange).then(function (data) {
-                _this5.setState({ projectChange: projectChange, projectOrig: projectChange, blockName: '' });
+            projectChange.tasks = newTasks;
+            this.props.updateProject(projectOrig, projectChange).then(function (data) {
+                _this7.setState({ projectChange: projectChange, projectOrig: projectChange, blockName: '' });
             }).catch(function (err) {
                 console.log('err', err.message);
             });
@@ -44940,7 +44942,7 @@ var ProjectShow = function (_Component) {
     }, {
         key: 'render',
         value: function render() {
-            var _this6 = this;
+            var _this8 = this;
 
             return _react2.default.createElement(
                 'div',
@@ -44975,7 +44977,7 @@ var ProjectShow = function (_Component) {
                         _react2.default.createElement('input', { type: 'text', placeholder: 'Add a New Task Name...', className: 'form-control',
                             style: { width: '500px' },
                             onChange: function onChange(e) {
-                                return _this6.setState({ newTask: e.target.value });
+                                return _this8.setState({ newTask: e.target.value });
                             }, value: this.state.newTask }),
                         _react2.default.createElement(
                             'button',
@@ -45000,13 +45002,13 @@ var ProjectShow = function (_Component) {
                                 _react2.default.createElement(
                                     'div',
                                     { className: 'input-group' },
-                                    _react2.default.createElement('input', { type: 'text', placeholder: 'Name this block of Time!', value: _this6.state.blockName,
+                                    _react2.default.createElement('input', { type: 'text', placeholder: 'Name this block of Time!', value: _this8.state.blockName,
                                         className: 'form-control', style: { width: '450px' }, onChange: function onChange(e) {
-                                            return _this6.setState({ blockName: e.target.value });
+                                            return _this8.setState({ blockName: e.target.value });
                                         } }),
                                     _react2.default.createElement(
                                         'button',
-                                        { className: 'btn btn-success', style: { marginLeft: '10px', width: '300px' }, onClick: _this6.createTaskBlock.bind(_this6, t) },
+                                        { className: 'btn btn-success', style: { marginLeft: '10px', width: '300px' }, onClick: _this8.createTaskBlock.bind(_this8, t) },
                                         'Create!'
                                     )
                                 ),
@@ -45025,13 +45027,13 @@ var ProjectShow = function (_Component) {
                                             ),
                                             time.start == '' ? _react2.default.createElement(
                                                 'button',
-                                                { onClick: _this6.start.bind(_this6, t, time),
+                                                { onClick: _this8.updateBlockTime.bind(_this8, t, time, 'start'),
                                                     style: { width: '150px' },
                                                     className: 'btn btn-success btn-xs pull-right' },
                                                 'Start'
                                             ) : _react2.default.createElement(
                                                 'button',
-                                                { onClick: _this6.end.bind(_this6, t, time),
+                                                { onClick: _this8.updateBlockTime.bind(_this8, t, time, 'end'),
                                                     style: { width: '150px' },
                                                     className: 'btn btn-success btn-xs pull-right' },
                                                 'End'

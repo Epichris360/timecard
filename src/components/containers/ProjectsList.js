@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect }          from 'react-redux'
 import actions              from '../../actions'
 import { Link }             from 'react-router-dom'
+import Loader               from './Loader'
 
 
 class ProjectsList extends Component{
@@ -26,7 +27,7 @@ class ProjectsList extends Component{
                 <h1>My Projects:</h1>
                 <hr/>
                 {
-                    this.state.loading ? <h1>Loading.....</h1> :
+                    this.state.loading ? <h1>Loading....</h1>  :
                     <div className="row">
                         {
                             this.props.projects.map( (p,i) => {
@@ -48,7 +49,9 @@ class ProjectsList extends Component{
                 }
                 <br/>
                 
-                
+                <button onClick={() => console.log('this.props.projects',this.props.projects)}>
+                    this.props.projects
+                </button>
             </div>
         )
     }

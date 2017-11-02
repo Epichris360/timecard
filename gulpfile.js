@@ -20,7 +20,8 @@ gulp.task('css', function(){
                 './public/css/animate.css',
                 './public/css/magnific-popup.css',
                 './public/css/responsive.css',
-                './public/css/custom.css'
+                './public/css/custom.css',
+                './public/css/loader.css'
             ]
         )
         .pipe(minifyCSS())

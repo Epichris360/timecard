@@ -25,7 +25,7 @@ class CreateProject extends Component{
     }
     render(){
         return(
-            <div className="container">  
+            <div className="container">
                 <h1>Create a New Project to Track!</h1>
                 <hr/>
                 <label htmlFor="">Name of the Project:</label>
@@ -36,7 +36,7 @@ class CreateProject extends Component{
                  onChange={e => this.setState({description: e.target.value})} ></textarea>
                 <br/>
                 <h4>Pick a Color for Your Projects Color:</h4>
-                <input type="color" onChange={e => this.setState({color: e.target.value})}/>
+                <input type="color" value={'#6680a4'} onChange={e => this.setState({color: e.target.value})}/>
                 <hr />
                     <div style={{ width:318, height:180, backgroundColor:this.state.color }}>
                         <h1 className="text-center" style={{ color:'white' ,padding:40}}>{this.state.name}</h1>

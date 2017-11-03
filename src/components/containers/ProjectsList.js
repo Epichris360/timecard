@@ -48,11 +48,11 @@ class ProjectsList extends Component{
                     </div>
                 }
                 <br/>
-                {/*
+                {
                     <button onClick={() => console.log('this.props.projects',this.props.projects)}>
                         this.props.projects
                     </button>
-                */}
+                }
                 
             </div>
         )

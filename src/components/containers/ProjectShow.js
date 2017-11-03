@@ -20,7 +20,6 @@ class ProjectShow extends Component{
         this.setState({projectOrig:project, projectChange:project, loading:false})
     }
     submitTask(){
-        //times: { times_id: v4(), start: new Date().toString(), end:'', name:'' }
         let { projectChange, projectOrig } = this.state
         projectChange.tasks.push( {task_id: v4(), name:this.state.newTask, times:[], totalTime:0} )
         this.props.updateProject(projectOrig, projectChange)
@@ -40,6 +39,8 @@ class ProjectShow extends Component{
             )
         })
         projectChange.tasks = newTasks
+        projectChange.projectTime = projectChange.projectTime + totalTimeTemp
+        totalTimeTemp = 0
         this.props.updateProject(projectOrig, projectChange)
         .then(data => {
             this.setState({projectChange: projectChange, projectOrig: projectChange})
@@ -56,7 +57,6 @@ class ProjectShow extends Component{
         })
         task.times = newTimes
         task.totalTime = task.totalTime + totalTimeTemp
-        totalTimeTemp = 0
         return task
     }
     updateTime(time,which){
@@ -66,17 +66,15 @@ class ProjectShow extends Component{
             time.end = new Date()
             var diff = Math.abs(new Date(time.start) - new Date(time.end))
             var minutes = Math.floor((diff/1000)/60);
-            console.log('minutes',minutes)
             totalTimeTemp = minutes
-            console.log('minutes!!!!',totalTimeTemp)
         }
         return time
     }
     deleteTasks(){
         let { projectChange, projectOrig } = this.state
-        //loop and set tasks array to []
         projectChange.tasks = []
-        console.log('projectChange',projectChange)
+        projectChange.projectTime = 0
+        //console.log('projectChange',projectChange)
         this.props.updateProject(projectOrig, projectChange)
         .then(data => {
             console.log('done!')
@@ -113,7 +111,18 @@ class ProjectShow extends Component{
                 {
                     this.state.loading ? <Loader /> :
                     <div>
-                        <h1>{this.state.projectChange.name}</h1>
+                        <div className="row">
+                            <div className="col-md-6">
+                                <h1>{this.state.projectChange.name}</h1>
+                            </div>
+                            <div className="col-md-6" >
+                                <h5 style={{float:'right'}} >
+                                    Project Time: { Math.floor(this.state.projectChange.projectTime / 60) } Hours 
+                                    and {this.state.projectChange.projectTime % 60} minutes
+                                </h5>
+                            </div>
+                        </div>
+                        
                         <hr/>
                         <p>
                             {this.state.projectChange.description}
@@ -121,6 +130,7 @@ class ProjectShow extends Component{
                         
                         <hr/>
                         <h4>Submit a New Task:</h4>
+
                         <div className="input-group">
                             <input type="text" placeholder="Add a New Task Name..." className="form-control"
                                     style={{width:'500px'}}
@@ -153,11 +163,11 @@ class ProjectShow extends Component{
                                                                     <button onClick={ this.updateBlockTime.bind(this ,t ,time, 'start') }
                                                                         style={{width:'150px'}}
                                                                         className="btn btn-success btn-xs pull-right">Start
-                                                                    </button> : 
+                                                                    </button> : time.end == '' ?
                                                                     <button onClick={ this.updateBlockTime.bind(this ,t ,time, 'end') }
                                                                         style={{width:'150px'}}
                                                                         className="btn btn-success btn-xs pull-right">End
-                                                                    </button> 
+                                                                    </button> : null
                                                                 }
                                                             </li>
                                                         )

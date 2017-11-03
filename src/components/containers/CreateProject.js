@@ -16,7 +16,8 @@ class CreateProject extends Component{
             throw 'error!'
         }
 
-        this.props.createProject({name, description, color,user_id: this.props.user.id, slug:name.split(' ').join('+'),tasks:[]})
+        this.props.createProject({name, description, color,user_id: this.props.user.id, 
+                slug:name.split(' ').join('+'),tasks:[],projectTime:0})
         .then(data => {
             this.setState({submitted:true})
             this.props.history.push('/projects')
@@ -39,7 +40,7 @@ class CreateProject extends Component{
                  onChange={e => this.setState({description: e.target.value})} ></textarea>
                 <br/>
                 <h4>Pick a Color for Your Projects Color:</h4>
-                <input type="color" value={'#6680a4'} onChange={e => this.setState({color: e.target.value})}/>
+                <input type="color"  onChange={e => this.setState({color: e.target.value})}/>
                 <hr />
                     <div style={{ width:318, height:180, backgroundColor:this.state.color }}>
                         <h1 className="text-center" style={{ color:'white' ,padding:40}}>{this.state.name}</h1>

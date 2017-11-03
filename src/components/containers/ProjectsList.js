@@ -32,8 +32,9 @@ class ProjectsList extends Component{
                         {
                             this.props.projects.map( (p,i) => {
                                 return(
-                                    <div key={i} className="col-md-4 card" style={{width: '340px', padding:'10px', border:'1px solid black', margin:'10px'}}>
-                                        <div style={{ width:318, height:180, backgroundColor:p.color }}>
+                                    <div key={i} className="col-md-4 col-sm-6 col-xs-12 card" 
+                                            style={{ padding:'10px', border:'1px solid black'}}>
+                                        <div style={{ height:172, backgroundColor:p.color }}>
                                             <h1 className="text-center" style={{color:'white',padding:40}}>{p.name}</h1>
                                         </div>
                                         <div className="card-block">
@@ -48,10 +49,10 @@ class ProjectsList extends Component{
                     </div>
                 }
                 <br/>
-                {
+                {/*
                     <button onClick={() => console.log('this.props.projects',this.props.projects)}>
                         this.props.projects
-                    </button>
+                    </button>*/
                 }
                 
             </div>

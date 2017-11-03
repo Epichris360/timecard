@@ -41,14 +41,14 @@ class CreateProject extends Component{
                 <br/>
                 <h4>Pick a Color for Your Projects Color:</h4>
                 <input type="color"  onChange={e => this.setState({color: e.target.value})}/>
-                <hr />
-                    <div style={{ width:318, height:180, backgroundColor:this.state.color }}>
+                
+                    <div className="col-md-4 col-sm-4 col-xs-12" style={{  height:180, backgroundColor:this.state.color }}>
                         <h1 className="text-center" style={{ color:'white' ,padding:40}}>{this.state.name}</h1>
                     </div>
-                <hr />
+                <br />
                 {
                     this.state.submitted ? <Loader /> :
-                    <button className="btn btn-success btn-lg pull-right"
+                    <button style={{marginTop:'15px'}} className="btn btn-success btn-lg pull-right"
                         onClick={ this.createProject.bind(this) }>
                         Submit!
                     </button>

@@ -1,7 +1,9 @@
-import React, { Component } from 'react'
-import { Link }             from 'react-router-dom'
-import { connect }          from 'react-redux'
-import actions              from '../../actions'
+import React, { Component }                            from 'react'
+import { Link }                                        from 'react-router-dom'
+import { connect }                                     from 'react-redux'
+import actions                                         from '../../actions'
+import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap'
+import { LinkContainer }                               from 'react-router-bootstrap'
 
 
 class NavBar extends Component{
@@ -15,31 +17,42 @@ class NavBar extends Component{
     render(){
         return(
             <div>
-                <nav className="navbar navbar-inverse">
-                    <div className="container-fluid">
-                        <div className="navbar-header">
-                            <li><Link className="navbar-brand" to="/">TimeCard</Link></li>
-                        </div>
-                        <ul className="nav navbar-nav">
-                            {
-                            this.props.user.id != ''  ? 
-                                <ul className="nav navbar-nav navbar-right">
-                                    <li><Link to="" onClick={this.logout.bind(this)} >Logout</Link></li>
-                                    <li><Link to="/projects">Projects</Link></li>
-                                    <li><Link to="/new-project">New Project</Link></li>
-                                </ul> : 
-                                <ul className="nav navbar-nav navbar-right">
-                                    <li><Link to="/signin">Sign In</Link></li>
-                                    <li><Link to="/signup">Sign Up</Link></li>
-                                </ul>
-                            }
-                        </ul>
-                    </div>
-                </nav>
-
-                
-
-
+                <Navbar inverse collapseOnSelect>
+                    <Navbar.Header>
+                        <Navbar.Brand>
+                            <Link className="navbar-brand" to="/">TimeCard</Link>
+                        </Navbar.Brand>
+                        <Navbar.Toggle />
+                    </Navbar.Header>
+                    <Navbar.Collapse>
+                        {
+                            this.props.user.id != '' ?  
+                            <Nav>
+                                <NavDropdown eventKey={1} title="Project Options" id="basic-nav-dropdown">
+                                    <LinkContainer to="/projects">
+                                        <MenuItem eventKey={1.1}>Projects</MenuItem>
+                                    </LinkContainer>
+                                    <LinkContainer to="/new-project">
+                                        <MenuItem eventKey={1.2} href="/new-project">New Project</MenuItem>
+                                    </LinkContainer>
+                                </NavDropdown>
+                            </Nav> : null
+                        }
+                        {
+                            this.props.user.id == '' ?
+                            <Nav pullRight>
+                                <LinkContainer to="/signin">
+                                    <NavItem eventKey={1}>Sign In</NavItem>
+                                </LinkContainer>
+                                <LinkContainer to="/signup">
+                                    <NavItem eventKey={2}>Sign Up</NavItem>
+                                </LinkContainer>
+                            </Nav> :  <Nav pullRight>
+                                <NavItem eventKey={1} onClick={this.logout.bind(this)} >Logout</NavItem>
+                            </Nav>
+                        }
+                    </Navbar.Collapse>
+                </Navbar>
             </div>
         )
     }

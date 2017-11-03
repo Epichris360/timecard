@@ -19,7 +19,7 @@ class SignIn extends Component{
         this.setState({submitted:true})
         this.props.signIn({username:username,password:password})
         .then(response => {
-            this.props.history.push('/')
+            this.props.history.push('/projects')
             return
         })
         .catch(err => {
@@ -34,7 +34,7 @@ class SignIn extends Component{
                 
                     {
                         this.state.submitted ? <Loader /> :
-                        <div  className="col-xs-8 col-sm-8 col-md-8" >
+                        <div  className="col-xs-12 col-sm-12 col-md-8" >
                             {
                                 this.state.error ? 
                                 <div className="alert alert-danger">
@@ -56,7 +56,7 @@ class SignIn extends Component{
                             />
                             <br />
                             <button 
-                                className="btn btn-lg btn-success"
+                                className="btn btn-lg btn-success col-xs-12"
                                 onClick={ this.loginUser.bind(this) }
                             >Submit</button>
                         </div>

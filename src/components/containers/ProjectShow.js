@@ -112,10 +112,10 @@ class ProjectShow extends Component{
                     this.state.loading ? <Loader /> :
                     <div>
                         <div className="row">
-                            <div className="col-md-6">
+                            <div className="col-md-6 col-sm-6 col-xs-12">
                                 <h1>{this.state.projectChange.name}</h1>
                             </div>
-                            <div className="col-md-6" >
+                            <div className="col-md-6 col-sm-6 col-xs-12" >
                                 <h5 style={{float:'right'}} >
                                     Project Time: { Math.floor(this.state.projectChange.projectTime / 60) } Hours 
                                     and {this.state.projectChange.projectTime % 60} minutes
@@ -129,14 +129,16 @@ class ProjectShow extends Component{
                         </p>
                         
                         <hr/>
-                        <h4>Submit a New Task:</h4>
-
-                        <div className="input-group">
-                            <input type="text" placeholder="Add a New Task Name..." className="form-control"
-                                    style={{width:'500px'}}
-                                    onChange={ e => this.setState({newTask: e.target.value}) } value={this.state.newTask}/>
-                            <button className="btn btn-success" style={{marginLeft:'10px', width:'300px' }}
-                                onClick={this.submitTask.bind(this)}>Add the Task</button>
+                        <div className="row">
+                            <div className="col-md-12 col-sm-12 col-xs-12">
+                                <h4>Submit a New Task:</h4>
+                                <input type="text" placeholder="Add a New Task Name..." 
+                                        className="form-control"
+                                        onChange={ e => this.setState({newTask: e.target.value}) } value={this.state.newTask}/>
+                                <br />
+                                <button className="btn btn-success col-md-4 col-sm-4 col-xs-4"
+                                    onClick={this.submitTask.bind(this)}>Add the Task</button>
+                            </div>
                         </div>
                         <hr/>
                         <h4>Tasks:</h4>
@@ -146,17 +148,25 @@ class ProjectShow extends Component{
                                 this.state.projectChange.tasks.map( (t,i) => {
                                     return(
                                         <Panel header={ `Task: ${t.name} | Total Time: ${t.totalTime}` } eventKey={i} key={i}>
-                                            <div className="input-group">
-                                                <input type="text" placeholder="Name this block of Time!" value={this.state.blockName}
-                                                    className="form-control" style={{width:'450px'}} onChange={e=>this.setState({blockName:e.target.value})}  />
-                                                <button className="btn btn-success" style={{marginLeft:'10px',width:'300px'}} onClick={ this.createTaskBlock.bind(this,t) }>Create!</button>
+                                            <div className="row">
+                                                <div className="col-md-12 col-sm-12 col-xs-12">
+                                                    <div className="col-md-6 col-sm-6">
+                                                        <input type="text" placeholder="Name this block of Time!" value={this.state.blockName}
+                                                            className="form-control"  onChange={e=>this.setState({blockName:e.target.value})}  />
+                                                    </div>
+                                                    <button className="btn btn-success col-md-4 col-sm-4 col-xs-12" onClick={ this.createTaskBlock.bind(this,t) }>Create!</button>
+                                                </div>
                                             </div>
                                             <br/>
-                                            <ul className="list-group">
+                                            {
+                                                t.times != [] ? <span>Blocks of Time:</span> : null
+                                            }
+                                            
+                                            <ul className="row list-group">
                                                 {
                                                     t.times.map( (time,i) => {
                                                         return(
-                                                            <li className="list-group-item" key={i}>
+                                                            <li className="list-group-item col-xs-12" key={i}>
                                                                 <span>{time.name}</span>
                                                                 {
                                                                     time.start == '' ? 

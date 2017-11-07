@@ -8604,11 +8604,15 @@ var Loader = function (_Component) {
         value: function render() {
             return _react2.default.createElement(
                 "div",
-                { className: "row" },
+                { className: "container" },
                 _react2.default.createElement(
                     "div",
-                    { className: "col-md-7 col-md-offset-5 col-sm-6 col-sm-offset-4 col-xs-10 col-xs-offset-2" },
-                    _react2.default.createElement("div", { className: "loader", style: { width: '240px', height: '240px' } })
+                    { className: "row" },
+                    _react2.default.createElement(
+                        "div",
+                        { className: "col-md-7 col-md-offset-5 col-sm-6 col-sm-offset-4 col-xs-10 col-xs-offset-2" },
+                        _react2.default.createElement("div", { className: "loader", style: { width: '240px', height: '240px' } })
+                    )
                 )
             );
         }
@@ -17985,7 +17989,7 @@ var app = _react2.default.createElement(
 			_react2.default.createElement(_containers.NavBar, null),
 			_react2.default.createElement(
 				'div',
-				{ className: 'container' },
+				null,
 				_react2.default.createElement(
 					_reactRouterDom.Switch,
 					null,
@@ -42552,14 +42556,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	This container serves primarily as an example of how to execute basic
-	user tasks like login, logout, etc. Feel free to re-purpose this componenet 
-	for your own project or create your own components using the functions 
-	from here as a guide.
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-*/
-
 var Users = function (_Component) {
 	_inherits(Users, _Component);
 
@@ -44418,13 +44414,65 @@ var MainPage = function (_Component) {
                 { className: "row" },
                 _react2.default.createElement(
                     "div",
-                    { className: "col-md-12 col-sm-12 col-xs-12" },
+                    { style: bgimg },
                     _react2.default.createElement(
-                        "h1",
+                        "div",
                         null,
-                        "Track your Work!"
+                        _react2.default.createElement("img", { style: img, src: "https://images.unsplash.com/photo-1499377193864-82682aefed04?auto=format&fit=crop&w=1351&q=60&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D", alt: "" })
                     ),
-                    _react2.default.createElement("img", { src: 'https://images.unsplash.com/photo-1416960513043-95d3e6da2ce8?auto=format&fit=crop&w=890&q=60&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D', alt: "" })
+                    _react2.default.createElement(
+                        "div",
+                        { style: caption },
+                        _react2.default.createElement(
+                            "div",
+                            { style: { marginBottom: '30px' } },
+                            _react2.default.createElement(
+                                "span",
+                                { style: border },
+                                "Keep Track"
+                            )
+                        ),
+                        _react2.default.createElement("br", null),
+                        _react2.default.createElement(
+                            "div",
+                            { style: { marginBottom: '30px' } },
+                            _react2.default.createElement(
+                                "span",
+                                { style: border },
+                                "Of Your"
+                            ),
+                            _react2.default.createElement("br", null),
+                            " ",
+                            _react2.default.createElement("br", null),
+                            " ",
+                            _react2.default.createElement("br", null),
+                            _react2.default.createElement(
+                                "span",
+                                { style: border },
+                                "Projects"
+                            )
+                        ),
+                        _react2.default.createElement("br", null),
+                        _react2.default.createElement(
+                            "div",
+                            { style: { marginBottom: '30px' } },
+                            _react2.default.createElement(
+                                "span",
+                                { style: border },
+                                "Keep Track"
+                            )
+                        ),
+                        _react2.default.createElement("br", null),
+                        _react2.default.createElement(
+                            "div",
+                            { style: { marginBottom: '30px' } },
+                            _react2.default.createElement(
+                                "span",
+                                { style: border },
+                                "Of Your Time"
+                            )
+                        )
+                    )
                 )
             );
         }
@@ -44432,6 +44480,38 @@ var MainPage = function (_Component) {
 
     return MainPage;
 }(_react.Component);
+
+var bgimg = {
+
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    height: '100%',
+    marginTop: '-20px'
+};
+
+var caption = {
+    position: 'absolute',
+    left: 0,
+    top: '20%',
+    width: '100%',
+    textAlign: 'center',
+    color: '#000'
+};
+
+var border = {
+    backgroundColor: '#111',
+    color: '#fff',
+    padding: '18px',
+    fontSize: '25px',
+    letterSpacing: '10px',
+    opacity: '.70',
+    marginTop: '20px'
+};
+
+var img = {
+    maxWidth: '100%', height: 'auto'
+};
 
 exports.default = MainPage;
 
@@ -56161,10 +56241,10 @@ var SignIn = function (_Component) {
 
             return _react2.default.createElement(
                 'div',
-                { className: 'row' },
+                { className: 'container' },
                 _react2.default.createElement(
                     'div',
-                    null,
+                    { className: 'row' },
                     this.state.submitted ? _react2.default.createElement(_Loader2.default, null) : _react2.default.createElement(
                         'div',
                         { className: 'col-xs-12 col-sm-12 col-md-8' },
@@ -56322,92 +56402,96 @@ var SignUp = function (_Component) {
 
             return _react2.default.createElement(
                 'div',
-                { className: 'row' },
-                this.state.error ? _react2.default.createElement(
-                    'div',
-                    { className: 'alert alert-danger' },
-                    _react2.default.createElement(
-                        'strong',
-                        null,
-                        'Danger!'
-                    ),
-                    ' ',
-                    this.state.errorMessage
-                ) : null,
+                { className: 'container' },
                 _react2.default.createElement(
                     'div',
-                    { className: 'col-md-8' },
+                    { className: 'row' },
+                    this.state.error ? _react2.default.createElement(
+                        'div',
+                        { className: 'alert alert-danger' },
+                        _react2.default.createElement(
+                            'strong',
+                            null,
+                            'Danger!'
+                        ),
+                        ' ',
+                        this.state.errorMessage
+                    ) : null,
                     _react2.default.createElement(
-                        'h1',
-                        { className: 'topmargin-sm nobottommargin' },
-                        'Sign Up!'
-                    ),
-                    _react2.default.createElement('hr', null),
-                    _react2.default.createElement('input', { className: 'form-control',
-                        type: 'text',
-                        placeholder: 'User Name',
-                        onChange: function onChange(e) {
-                            return _this3.setState({ username: e.target.value });
-                        },
-                        required: true
-                    }),
-                    ' ',
-                    _react2.default.createElement('br', null),
-                    _react2.default.createElement('input', { className: 'form-control',
-                        type: 'text',
-                        placeholder: 'First Name',
-                        onChange: function onChange(e) {
-                            return _this3.setState({ firstName: e.target.value });
-                        },
-                        required: true
-                    }),
-                    ' ',
-                    _react2.default.createElement('br', null),
-                    _react2.default.createElement('input', { className: 'form-control',
-                        type: 'text',
-                        placeholder: 'Last Name',
-                        onChange: function onChange(e) {
-                            return _this3.setState({ lastName: e.target.value });
-                        },
-                        required: true
-                    }),
-                    ' ',
-                    _react2.default.createElement('br', null),
-                    _react2.default.createElement('input', { className: 'form-control',
-                        type: 'text',
-                        placeholder: 'Email',
-                        onChange: function onChange(e) {
-                            return _this3.setState({ email: e.target.value });
-                        },
-                        required: true
-                    }),
-                    _react2.default.createElement('br', null),
-                    _react2.default.createElement('input', { className: 'form-control',
-                        type: 'password',
-                        placeholder: 'Password',
-                        onChange: function onChange(e) {
-                            return _this3.setState({ password: e.target.value });
-                        },
-                        required: true
-                    }),
-                    ' ',
-                    _react2.default.createElement('br', null),
-                    _react2.default.createElement('input', { className: 'form-control',
-                        type: 'password',
-                        placeholder: 'Password Confirm',
-                        onChange: function onChange(e) {
-                            return _this3.setState({ passwordConfirm: e.target.value });
-                        },
-                        required: true
-                    }),
-                    _react2.default.createElement('br', null),
-                    _react2.default.createElement(
-                        'button',
-                        {
-                            className: 'btn btn-lg btn-success',
-                            onClick: this.newUser.bind(this)
-                        },
-                        'Sign Up!'
+                        'div',
+                        { className: 'col-md-8' },
+                        _react2.default.createElement(
+                            'h1',
+                            { className: 'topmargin-sm nobottommargin' },
+                            'Sign Up!'
+                        ),
+                        _react2.default.createElement('hr', null),
+                        _react2.default.createElement('input', { className: 'form-control',
+                            type: 'text',
+                            placeholder: 'User Name',
+                            onChange: function onChange(e) {
+                                return _this3.setState({ username: e.target.value });
+                            },
+                            required: true
+                        }),
+                        ' ',
+                        _react2.default.createElement('br', null),
+                        _react2.default.createElement('input', { className: 'form-control',
+                            type: 'text',
+                            placeholder: 'First Name',
+                            onChange: function onChange(e) {
+                                return _this3.setState({ firstName: e.target.value });
+                            },
+                            required: true
+                        }),
+                        ' ',
+                        _react2.default.createElement('br', null),
+                        _react2.default.createElement('input', { className: 'form-control',
+                            type: 'text',
+                            placeholder: 'Last Name',
+                            onChange: function onChange(e) {
+                                return _this3.setState({ lastName: e.target.value });
+                            },
+                            required: true
+                        }),
+                        ' ',
+                        _react2.default.createElement('br', null),
+                        _react2.default.createElement('input', { className: 'form-control',
+                            type: 'text',
+                            placeholder: 'Email',
+                            onChange: function onChange(e) {
+                                return _this3.setState({ email: e.target.value });
+                            },
+                            required: true
+                        }),
+                        _react2.default.createElement('br', null),
+                        _react2.default.createElement('input', { className: 'form-control',
+                            type: 'password',
+                            placeholder: 'Password',
+                            onChange: function onChange(e) {
+                                return _this3.setState({ password: e.target.value });
+                            },
+                            required: true
+                        }),
+                        ' ',
+                        _react2.default.createElement('br', null),
+                        _react2.default.createElement('input', { className: 'form-control',
+                            type: 'password',
+                            placeholder: 'Password Confirm',
+                            onChange: function onChange(e) {
+                                return _this3.setState({ passwordConfirm: e.target.value });
+                            },
+                            required: true
+                        }),
+                        _react2.default.createElement('br', null),
+                        _react2.default.createElement(
+                            'button',
+                            {
+                                className: 'btn btn-lg btn-success',
+                                onClick: this.newUser.bind(this)
+                            },
+                            'Sign Up!'
+                        )
                     )
                 )
             );
@@ -56494,7 +56578,7 @@ var ProjectsList = function (_Component) {
         value: function render() {
             return _react2.default.createElement(
                 'div',
-                null,
+                { className: 'container' },
                 _react2.default.createElement(
                     'h1',
                     null,
@@ -56508,7 +56592,7 @@ var ProjectsList = function (_Component) {
                         return _react2.default.createElement(
                             'div',
                             { key: i, className: 'col-md-4 col-sm-6 col-xs-12 card',
-                                style: { padding: '10px', border: '1px solid black' } },
+                                style: { padding: '10px', border: '1px solid gray' } },
                             _react2.default.createElement(
                                 'div',
                                 { style: { height: 172, backgroundColor: p.color } },
@@ -56607,6 +56691,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var totalTimeTemp = 0;
+var tempTaskTime = 0;
 
 var ProjectShow = function (_Component) {
     _inherits(ProjectShow, _Component);
@@ -56690,7 +56775,7 @@ var ProjectShow = function (_Component) {
                 time.start = new Date();
             } else if (which == 'end') {
                 time.end = new Date();
-                var diff = Math.abs(new Date(time.start) - new Date(time.end));
+                var diff = Math.abs(new Date(time.end) - new Date(time.start));
                 var minutes = Math.floor(diff / 1000 / 60);
                 totalTimeTemp = minutes;
             }
@@ -56742,144 +56827,177 @@ var ProjectShow = function (_Component) {
             return t;
         }
     }, {
+        key: 'disableTask',
+        value: function disableTask(task) {
+            //disable a task and delete its time from the total time of the project
+            //if enabled, add this back
+            //design a nice front page.
+            var _state5 = this.state,
+                projectChange = _state5.projectChange,
+                projectOrig = _state5.projectOrig;
+
+            var newTasks = projectChange.tasks.map(function (t) {
+                return t.task_id == task.task_id ? findTaskDisable(t) : t;
+            });
+            projectChange.tasks = newTasks;
+            projectChange.projectTime = projectChange.projectTime - tempTaskTime;
+        }
+    }, {
+        key: 'findTaskDisable',
+        value: function findTaskDisable(t) {
+            t.disabled = true;
+            tempTaskTime = t.totalTime;
+            return t;
+        }
+    }, {
+        key: 'disableTime',
+        value: function disableTime() {
+            //disable a subtask and take its time away from the task total and from the project total
+            //if added back in, add all this back 
+        }
+    }, {
         key: 'render',
         value: function render() {
             var _this8 = this;
 
             return _react2.default.createElement(
                 'div',
-                null,
-                this.state.loading ? _react2.default.createElement(_Loader2.default, null) : _react2.default.createElement(
+                { className: 'container' },
+                _react2.default.createElement(
                     'div',
-                    null,
-                    _react2.default.createElement(
+                    { className: 'container' },
+                    this.state.loading ? _react2.default.createElement(_Loader2.default, null) : _react2.default.createElement(
                         'div',
-                        { className: 'row' },
+                        null,
                         _react2.default.createElement(
                             'div',
-                            { className: 'col-md-6 col-sm-6 col-xs-12' },
+                            { className: 'row' },
                             _react2.default.createElement(
-                                'h1',
-                                null,
-                                this.state.projectChange.name
+                                'div',
+                                { className: 'col-md-6 col-sm-6 col-xs-12' },
+                                _react2.default.createElement(
+                                    'h1',
+                                    null,
+                                    this.state.projectChange.name
+                                )
+                            ),
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'col-md-6 col-sm-6 col-xs-12' },
+                                _react2.default.createElement(
+                                    'h5',
+                                    { style: { float: 'right' } },
+                                    'Project Time: ',
+                                    Math.floor(this.state.projectChange.projectTime / 60),
+                                    ' Hours and ',
+                                    this.state.projectChange.projectTime % 60,
+                                    ' minutes'
+                                )
                             )
                         ),
+                        _react2.default.createElement('hr', null),
+                        _react2.default.createElement(
+                            'p',
+                            null,
+                            this.state.projectChange.description
+                        ),
+                        _react2.default.createElement('hr', null),
                         _react2.default.createElement(
                             'div',
-                            { className: 'col-md-6 col-sm-6 col-xs-12' },
+                            { className: 'row' },
                             _react2.default.createElement(
-                                'h5',
-                                { style: { float: 'right' } },
-                                'Project Time: ',
-                                Math.floor(this.state.projectChange.projectTime / 60),
-                                ' Hours and ',
-                                this.state.projectChange.projectTime % 60,
-                                ' minutes'
-                            )
-                        )
-                    ),
-                    _react2.default.createElement('hr', null),
-                    _react2.default.createElement(
-                        'p',
-                        null,
-                        this.state.projectChange.description
-                    ),
-                    _react2.default.createElement('hr', null),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'row' },
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'col-md-12 col-sm-12 col-xs-12' },
-                            _react2.default.createElement(
-                                'h4',
-                                null,
-                                'Submit a New Task:'
-                            ),
-                            _react2.default.createElement('input', { type: 'text', placeholder: 'Add a New Task Name...',
-                                className: 'form-control',
-                                onChange: function onChange(e) {
-                                    return _this8.setState({ newTask: e.target.value });
-                                }, value: this.state.newTask }),
-                            _react2.default.createElement('br', null),
-                            _react2.default.createElement(
-                                'button',
-                                { className: 'btn btn-success col-md-4 col-sm-4 col-xs-4',
-                                    onClick: this.submitTask.bind(this) },
-                                'Add the Task'
-                            )
-                        )
-                    ),
-                    _react2.default.createElement('hr', null),
-                    _react2.default.createElement(
-                        'h4',
-                        null,
-                        'Tasks:'
-                    ),
-                    _react2.default.createElement(
-                        _reactBootstrap.Accordion,
-                        null,
-                        this.state.projectChange.tasks.map(function (t, i) {
-                            return _react2.default.createElement(
-                                _reactBootstrap.Panel,
-                                { header: 'Task: ' + t.name + ' | Total Time: ' + t.totalTime, eventKey: i, key: i },
+                                'div',
+                                { className: 'col-md-12 col-sm-12 col-xs-12' },
                                 _react2.default.createElement(
-                                    'div',
-                                    { className: 'row' },
+                                    'h4',
+                                    null,
+                                    'Submit a New Task:'
+                                ),
+                                _react2.default.createElement('input', { type: 'text', placeholder: 'Add a New Task Name...',
+                                    className: 'form-control',
+                                    onChange: function onChange(e) {
+                                        return _this8.setState({ newTask: e.target.value });
+                                    }, value: this.state.newTask }),
+                                _react2.default.createElement('br', null),
+                                _react2.default.createElement(
+                                    'button',
+                                    { className: 'btn btn-success col-md-4 col-sm-4 col-xs-4',
+                                        onClick: this.submitTask.bind(this) },
+                                    'Add the Task'
+                                )
+                            )
+                        ),
+                        _react2.default.createElement('hr', null),
+                        _react2.default.createElement(
+                            'h4',
+                            null,
+                            'Tasks:'
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.Accordion,
+                            null,
+                            this.state.projectChange.tasks.map(function (t, i) {
+                                return _react2.default.createElement(
+                                    _reactBootstrap.Panel,
+                                    { header: 'Task: ' + t.name + ' | Total Time: ' + t.totalTime, eventKey: i, key: i },
                                     _react2.default.createElement(
                                         'div',
-                                        { className: 'col-md-12 col-sm-12 col-xs-12' },
+                                        { className: 'row' },
                                         _react2.default.createElement(
                                             'div',
-                                            { className: 'col-md-6 col-sm-6' },
-                                            _react2.default.createElement('input', { type: 'text', placeholder: 'Name this block of Time!', value: _this8.state.blockName,
-                                                className: 'form-control', onChange: function onChange(e) {
-                                                    return _this8.setState({ blockName: e.target.value });
-                                                } })
-                                        ),
-                                        _react2.default.createElement(
-                                            'button',
-                                            { className: 'btn btn-success col-md-4 col-sm-4 col-xs-12', onClick: _this8.createTaskBlock.bind(_this8, t) },
-                                            'Create!'
-                                        )
-                                    )
-                                ),
-                                _react2.default.createElement('br', null),
-                                t.times != [] ? _react2.default.createElement(
-                                    'span',
-                                    null,
-                                    'Blocks of Time:'
-                                ) : null,
-                                _react2.default.createElement(
-                                    'ul',
-                                    { className: 'row list-group' },
-                                    t.times.map(function (time, i) {
-                                        return _react2.default.createElement(
-                                            'li',
-                                            { className: 'list-group-item col-xs-12', key: i },
+                                            { className: 'col-md-12 col-sm-12 col-xs-12' },
                                             _react2.default.createElement(
-                                                'span',
-                                                null,
-                                                time.name
+                                                'div',
+                                                { className: 'col-md-6 col-sm-6' },
+                                                _react2.default.createElement('input', { type: 'text', placeholder: 'Name this block of Time!', value: _this8.state.blockName,
+                                                    className: 'form-control', onChange: function onChange(e) {
+                                                        return _this8.setState({ blockName: e.target.value });
+                                                    } })
                                             ),
-                                            time.start == '' ? _react2.default.createElement(
+                                            _react2.default.createElement(
                                                 'button',
-                                                { onClick: _this8.updateBlockTime.bind(_this8, t, time, 'start'),
-                                                    style: { width: '150px' },
-                                                    className: 'btn btn-success btn-xs pull-right' },
-                                                'Start'
-                                            ) : time.end == '' ? _react2.default.createElement(
-                                                'button',
-                                                { onClick: _this8.updateBlockTime.bind(_this8, t, time, 'end'),
-                                                    style: { width: '150px' },
-                                                    className: 'btn btn-success btn-xs pull-right' },
-                                                'End'
-                                            ) : null
-                                        );
-                                    })
-                                )
-                            );
-                        })
+                                                { className: 'btn btn-success col-md-4 col-sm-4 col-xs-12', onClick: _this8.createTaskBlock.bind(_this8, t) },
+                                                'Create!'
+                                            )
+                                        )
+                                    ),
+                                    _react2.default.createElement('br', null),
+                                    t.times != [] ? _react2.default.createElement(
+                                        'span',
+                                        null,
+                                        'Blocks of Time:'
+                                    ) : null,
+                                    _react2.default.createElement(
+                                        'ul',
+                                        { className: 'row list-group' },
+                                        t.times.map(function (time, i) {
+                                            return _react2.default.createElement(
+                                                'li',
+                                                { className: 'list-group-item col-xs-12', key: i },
+                                                _react2.default.createElement(
+                                                    'span',
+                                                    null,
+                                                    time.name
+                                                ),
+                                                time.start == '' ? _react2.default.createElement(
+                                                    'button',
+                                                    { onClick: _this8.updateBlockTime.bind(_this8, t, time, 'start'),
+                                                        style: { width: '150px' },
+                                                        className: 'btn btn-success btn-xs pull-right' },
+                                                    'Start'
+                                                ) : time.end == '' ? _react2.default.createElement(
+                                                    'button',
+                                                    { onClick: _this8.updateBlockTime.bind(_this8, t, time, 'end'),
+                                                        style: { width: '150px' },
+                                                        className: 'btn btn-success btn-xs pull-right' },
+                                                    'End'
+                                                ) : null
+                                            );
+                                        })
+                                    )
+                                );
+                            })
+                        )
                     )
                 )
             );

@@ -23,7 +23,7 @@ class ProjectsList extends Component{
     }
     render(){
         return(
-            <div>
+            <div className="container">
                 <h1>My Projects:</h1>
                 <hr/>
                 {
@@ -33,7 +33,7 @@ class ProjectsList extends Component{
                             this.props.projects.map( (p,i) => {
                                 return(
                                     <div key={i} className="col-md-4 col-sm-6 col-xs-12 card" 
-                                            style={{ padding:'10px', border:'1px solid black'}}>
+                                            style={{ padding:'10px', border:'1px solid gray'}}>
                                         <div style={{ height:172, backgroundColor:p.color }}>
                                             <h1 className="text-center" style={{color:'white',padding:40}}>{p.name}</h1>
                                         </div>

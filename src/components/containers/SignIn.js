@@ -29,8 +29,8 @@ class SignIn extends Component{
     }
     render(){
         return(
-            <div className="row">
-                <div  >
+            <div className="container" >
+                <div className="row" >
                 
                     {
                         this.state.submitted ? <Loader /> :

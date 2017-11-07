@@ -6,6 +6,7 @@ import { Accordion, Panel } from 'react-bootstrap'
 import Loader               from './Loader'
 
 let totalTimeTemp = 0
+let tempTaskTime  = 0
 
 class ProjectShow extends Component{
     constructor(props){
@@ -64,7 +65,7 @@ class ProjectShow extends Component{
             time.start = new Date()
         }else if(which == 'end'){
             time.end = new Date()
-            var diff = Math.abs(new Date(time.start) - new Date(time.end))
+            var diff = Math.abs(new Date(time.end) - new Date(time.start))
             var minutes = Math.floor((diff/1000)/60);
             totalTimeTemp = minutes
         }
@@ -105,97 +106,120 @@ class ProjectShow extends Component{
         t.times.push(time)
         return t
     }
+    disableTask(task){
+        //disable a task and delete its time from the total time of the project
+        //if enabled, add this back
+        //design a nice front page.
+        let { projectChange, projectOrig } = this.state
+        let newTasks = projectChange.tasks.map( t => {
+            return(
+                t.task_id == task.task_id ? findTaskDisable(t) : t 
+            )
+        })
+        projectChange.tasks = newTasks
+        projectChange.projectTime = projectChange.projectTime - tempTaskTime
+    }
+    findTaskDisable(t){
+        t.disabled = true
+        tempTaskTime = t.totalTime
+        return t
+    }
+    disableTime(){
+        //disable a subtask and take its time away from the task total and from the project total
+        //if added back in, add all this back 
+    }
     render(){
         return(
-            <div>
-                {
-                    this.state.loading ? <Loader /> :
-                    <div>
-                        <div className="row">
-                            <div className="col-md-6 col-sm-6 col-xs-12">
-                                <h1>{this.state.projectChange.name}</h1>
+            <div className="container" >
+                <div className="container">
+                    {
+                        this.state.loading ? <Loader /> :
+                        <div>
+                            <div className="row">
+                                <div className="col-md-6 col-sm-6 col-xs-12">
+                                    <h1>{this.state.projectChange.name}</h1>
+                                </div>
+                                <div className="col-md-6 col-sm-6 col-xs-12" >
+                                    <h5 style={{float:'right'}} >
+                                        Project Time: { Math.floor(this.state.projectChange.projectTime / 60) } Hours 
+                                        and {this.state.projectChange.projectTime % 60} minutes
+                                    </h5>
+                                </div>
                             </div>
-                            <div className="col-md-6 col-sm-6 col-xs-12" >
-                                <h5 style={{float:'right'}} >
-                                    Project Time: { Math.floor(this.state.projectChange.projectTime / 60) } Hours 
-                                    and {this.state.projectChange.projectTime % 60} minutes
-                                </h5>
+                            
+                            <hr/>
+                            <p>
+                                {this.state.projectChange.description}
+                            </p>
+                            
+                            <hr/>
+                            <div className="row">
+                                <div className="col-md-12 col-sm-12 col-xs-12">
+                                    <h4>Submit a New Task:</h4>
+                                    <input type="text" placeholder="Add a New Task Name..." 
+                                            className="form-control"
+                                            onChange={ e => this.setState({newTask: e.target.value}) } value={this.state.newTask}/>
+                                    <br />
+                                    <button className="btn btn-success col-md-4 col-sm-4 col-xs-4"
+                                        onClick={this.submitTask.bind(this)}>Add the Task</button>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <hr/>
-                        <p>
-                            {this.state.projectChange.description}
-                        </p>
-                        
-                        <hr/>
-                        <div className="row">
-                            <div className="col-md-12 col-sm-12 col-xs-12">
-                                <h4>Submit a New Task:</h4>
-                                <input type="text" placeholder="Add a New Task Name..." 
-                                        className="form-control"
-                                        onChange={ e => this.setState({newTask: e.target.value}) } value={this.state.newTask}/>
-                                <br />
-                                <button className="btn btn-success col-md-4 col-sm-4 col-xs-4"
-                                    onClick={this.submitTask.bind(this)}>Add the Task</button>
-                            </div>
-                        </div>
-                        <hr/>
-                        <h4>Tasks:</h4>
-                        
-                        <Accordion>
-                            {
-                                this.state.projectChange.tasks.map( (t,i) => {
-                                    return(
-                                        <Panel header={ `Task: ${t.name} | Total Time: ${t.totalTime}` } eventKey={i} key={i}>
-                                            <div className="row">
-                                                <div className="col-md-12 col-sm-12 col-xs-12">
-                                                    <div className="col-md-6 col-sm-6">
-                                                        <input type="text" placeholder="Name this block of Time!" value={this.state.blockName}
-                                                            className="form-control"  onChange={e=>this.setState({blockName:e.target.value})}  />
+                            <hr/>
+                            <h4>Tasks:</h4>
+                            
+                            <Accordion>
+                                {
+                                    this.state.projectChange.tasks.map( (t,i) => {
+                                        return(
+                                            <Panel header={ `Task: ${t.name} | Total Time: ${t.totalTime}` } eventKey={i} key={i}>
+                                                <div className="row">
+                                                    <div className="col-md-12 col-sm-12 col-xs-12">
+                                                        <div className="col-md-6 col-sm-6">
+                                                            <input type="text" placeholder="Name this block of Time!" value={this.state.blockName}
+                                                                className="form-control"  onChange={e=>this.setState({blockName:e.target.value})}  />
+                                                        </div>
+                                                        <button className="btn btn-success col-md-4 col-sm-4 col-xs-12" onClick={ this.createTaskBlock.bind(this,t) }>Create!</button>
                                                     </div>
-                                                    <button className="btn btn-success col-md-4 col-sm-4 col-xs-12" onClick={ this.createTaskBlock.bind(this,t) }>Create!</button>
                                                 </div>
-                                            </div>
-                                            <br/>
-                                            {
-                                                t.times != [] ? <span>Blocks of Time:</span> : null
-                                            }
-                                            
-                                            <ul className="row list-group">
+                                                <br/>
                                                 {
-                                                    t.times.map( (time,i) => {
-                                                        return(
-                                                            <li className="list-group-item col-xs-12" key={i}>
-                                                                <span>{time.name}</span>
-                                                                {
-                                                                    time.start == '' ? 
-                                                                    <button onClick={ this.updateBlockTime.bind(this ,t ,time, 'start') }
-                                                                        style={{width:'150px'}}
-                                                                        className="btn btn-success btn-xs pull-right">Start
-                                                                    </button> : time.end == '' ?
-                                                                    <button onClick={ this.updateBlockTime.bind(this ,t ,time, 'end') }
-                                                                        style={{width:'150px'}}
-                                                                        className="btn btn-success btn-xs pull-right">End
-                                                                    </button> : null
-                                                                }
-                                                            </li>
-                                                        )
-                                                    })
+                                                    t.times != [] ? <span>Blocks of Time:</span> : null
                                                 }
-                                            </ul>
-                                        </Panel>
-                                    )
-                                })
+                                                <ul className="row list-group">
+                                                    {
+                                                        t.times.map( (time,i) => {
+                                                            return(
+                                                                <li className="list-group-item col-xs-12" key={i}>
+                                                                    <span>{time.name}</span>
+                                                                    {
+                                                                        time.start == '' ? 
+                                                                        <button onClick={ this.updateBlockTime.bind(this ,t ,time, 'start') }
+                                                                            style={{width:'150px'}}
+                                                                            className="btn btn-success btn-xs pull-right">Start
+                                                                        </button> : time.end == '' ?
+                                                                        <button onClick={ this.updateBlockTime.bind(this ,t ,time, 'end') }
+                                                                            style={{width:'150px'}}
+                                                                            className="btn btn-success btn-xs pull-right">End
+                                                                        </button> : null
+                                                                    }
+                                                                </li>
+                                                            )
+                                                        })
+                                                    }
+                                                </ul>
+                                            </Panel>
+                                        )
+                                    })
+                                }
+                            </Accordion>
+                            {/*
+                                <button onClick={this.deleteTasks.bind(this)}>
+                                    delete tasks
+                                </button>*/
                             }
-                        </Accordion>
-                        {/*
-                            <button onClick={this.deleteTasks.bind(this)}>
-                                delete tasks
-                            </button>*/
-                        }
-                    </div>
-                }
+                        </div>
+                    }
+                </div>
             </div>
         )
     } 

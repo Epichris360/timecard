@@ -11,7 +11,7 @@ const app = (
 		<Router>
 			<div >
 				<NavBar />
-				<div className="container">
+				<div>
 					<Switch>
 						<Route exact path='/' 	     component={MainPage} />
 						<Route path="/new-project"   component={CreateProject} />

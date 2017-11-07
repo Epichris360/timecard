@@ -44411,7 +44411,7 @@ var MainPage = function (_Component) {
         value: function render() {
             return _react2.default.createElement(
                 "div",
-                { className: "row" },
+                null,
                 _react2.default.createElement(
                     "div",
                     { style: bgimg },

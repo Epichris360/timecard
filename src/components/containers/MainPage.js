@@ -3,9 +3,9 @@ import React, { Component } from 'react'
 class MainPage extends Component{
     render(){
         return(
-            <div className="row" >
+            <div  >
                 <div style={bgimg}>
-                    <div  >
+                    <div >
                         <img style={img} src="https://images.unsplash.com/photo-1499377193864-82682aefed04?auto=format&fit=crop&w=1351&q=60&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D" alt=""/>
                     </div>
                     <div style={caption} >
@@ -27,6 +27,7 @@ class MainPage extends Component{
                             <span style={border}>Of Your Time</span>
                         </div>
                     </div>
+
                 </div>
             </div>
         )

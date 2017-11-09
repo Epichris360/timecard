@@ -4,6 +4,7 @@ import { v4 }               from 'uuid'
 import actions              from '../../actions'
 import { Accordion, Panel } from 'react-bootstrap'
 import Loader               from './Loader'
+import DangerAlert          from './DangerAlert'
 
 let totalTimeTemp = 0
 let tempTaskTime  = 0
@@ -12,7 +13,8 @@ class ProjectShow extends Component{
     constructor(props){
         super(props)
         this.state = {
-            projectOrig:null, projectChange:null, loading: true, newTask:'', blockName:''
+            projectOrig:null, projectChange:null, loading: true, newTask:'', 
+            blockName:'', error:false, errorMessage:''
         }
     }
     componentDidMount(){
@@ -28,7 +30,8 @@ class ProjectShow extends Component{
             this.setState({ newTask:'', projectChange, projectOrig: projectChange })
         })
         .catch(err => {
-            console.log('err',err.message)
+            //console.log('err',err.message)
+            this.setState({error:true, errorMessage: err.message})
         })
     }
     updateBlockTime(task, time,which){
@@ -47,7 +50,8 @@ class ProjectShow extends Component{
             this.setState({projectChange: projectChange, projectOrig: projectChange})
         })
         .catch(err => {
-            console.log('err',err.message)
+            //console.log('err',err.message)
+            this.setState({error:true, errorMessage: err.message})
         })
     }
     timesArray(task, time, which){
@@ -65,28 +69,30 @@ class ProjectShow extends Component{
             time.start = new Date()
         }else if(which == 'end'){
             time.end = new Date()
-            var diff = Math.abs(new Date(time.end) - new Date(time.start))
-            var minutes = Math.floor((diff/1000)/60);
-            totalTimeTemp = minutes
+            totalTimeTemp = this.calcTime(time.start, time.end)
         }
         return time
+    }
+    calcTime(start, end){
+        var diff = Math.abs(new Date(end) - new Date(start))
+        var minutes = Math.floor((diff/1000)/60);
+        return minutes 
     }
     deleteTasks(){
         let { projectChange, projectOrig } = this.state
         projectChange.tasks = []
         projectChange.projectTime = 0
-        //console.log('projectChange',projectChange)
         this.props.updateProject(projectOrig, projectChange)
         .then(data => {
-            console.log('done!')
             this.setState({projectChange: projectChange, projectOrig: projectChange})
         })
         .catch(err => {
-            console.log('err',err.message)
+            //console.log('err',err.message)
+            this.setState({error:true, errorMessage: err.message})
         })
     }
     createTaskBlock(t){
-        const time = { time_id:v4(),name:this.state.blockName , start:'', end:'' }
+        const time = { time_id:v4(),name:this.state.blockName , start:'', end:'', disabled:false }
         let { projectChange, projectOrig } = this.state
         const newTasks = projectChange.tasks.map( task => {
             return(
@@ -99,14 +105,15 @@ class ProjectShow extends Component{
             this.setState({projectChange: projectChange, projectOrig: projectChange, blockName:''})
         })
         .catch(err => {
-            console.log('err',err.message)
+            //console.log('err',err.message)
+            this.setState({error:true, errorMessage: err.message})
         })
     }
     timeStart(t, time){
         t.times.push(time)
         return t
     }
-    disableTask(task){
+    /*disableTask(task){
         //disable a task and delete its time from the total time of the project
         //if enabled, add this back
         //design a nice front page.
@@ -118,15 +125,58 @@ class ProjectShow extends Component{
         })
         projectChange.tasks = newTasks
         projectChange.projectTime = projectChange.projectTime - tempTaskTime
-    }
+    }*/
     findTaskDisable(t){
         t.disabled = true
         tempTaskTime = t.totalTime
         return t
     }
-    disableTime(){
-        //disable a subtask and take its time away from the task total and from the project total
-        //if added back in, add all this back 
+    disablingSubTask(t, time){
+        const durationOfSubTask = this.calcTime(time.start, time.end)
+        const { projectChange, projectOrig } = this.state
+
+        let tasksIndex = projectChange.tasks.map( task => task.task_id ).indexOf( t.task_id )
+        let subtaskIndex =  projectChange.tasks[tasksIndex].times.map( subtask => subtask.time_id ).indexOf(time.time_id)
+        
+        projectChange.tasks[tasksIndex].times[subtaskIndex] = this.disableSubTask(time, true)
+        projectChange.projectTime = projectChange.projectTime - durationOfSubTask
+
+        this.props.updateProject(projectOrig, projectChange)
+        .then(data => {
+            this.setState({projectChange: projectChange, projectOrig: projectChange})
+        })
+        .catch(err => {
+            //console.log('err',err.message)
+            this.setState({error:true, errorMessage: err.message})
+        })   
+    }
+    enableSubTask(t,time){
+        const durationOfSubTask = this.calcTime(time.start, time.end)
+        const { projectChange, projectOrig } = this.state
+
+        let tasksIndex = projectChange.tasks.map( task => task.task_id ).indexOf( t.task_id )
+        let subtaskIndex =  projectChange.tasks[tasksIndex].times.map( subtask => subtask.time_id ).indexOf(time.time_id)
+        
+        projectChange.tasks[tasksIndex].times[subtaskIndex] = this.disableSubTask(time, false)
+        projectChange.projectTime = projectChange.projectTime + durationOfSubTask
+
+        this.props.updateProject(projectOrig, projectChange)
+        .then(data => {
+            this.setState({projectChange: projectChange, projectOrig: projectChange})
+        })
+        .catch(err => {
+            //console.log('err',err.message)
+            this.setState({error:true, errorMessage: err.message})
+        })   
+    }
+    disableSubTask(tm, which){
+        if( which == true ){
+            tm.disabled = true
+            return tm
+        }else{
+            tm.disabled = false
+            return tm
+        }
     }
     render(){
         return(
@@ -136,6 +186,7 @@ class ProjectShow extends Component{
                         this.state.loading ? <Loader /> :
                         <div>
                             <div className="row">
+                                <DangerAlert error={this.state.error} errorMessage={this.state.errorMessage} />
                                 <div className="col-md-6 col-sm-6 col-xs-12">
                                     <h1>{this.state.projectChange.name}</h1>
                                 </div>
@@ -200,7 +251,16 @@ class ProjectShow extends Component{
                                                                         <button onClick={ this.updateBlockTime.bind(this ,t ,time, 'end') }
                                                                             style={{width:'150px'}}
                                                                             className="btn btn-success btn-xs pull-right">End
-                                                                        </button> : null
+                                                                        </button> : !time.disabled ?
+                                                                        <button onClick={ this.disablingSubTask.bind(this, t, time) } 
+                                                                            style={{width:'150px'}}
+                                                                            className="btn btn-danger btn-xs pull-right" >
+                                                                            Remove?
+                                                                        </button> : 
+                                                                        <button className="btn btn-danger btn-xs pull-right"
+                                                                                onClick={ this.enableSubTask.bind(this, t, time) } >
+                                                                            Enable?
+                                                                        </button>
                                                                     }
                                                                 </li>
                                                             )

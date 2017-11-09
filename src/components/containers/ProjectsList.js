@@ -16,9 +16,11 @@ class ProjectsList extends Component{
         this.props.getProjects({user_id: this.props.user.id})
         .then(data => {
             this.setState({ loading:false})
+            return
         })
         .catch(err => {
             console.log('err',err.message)
+            return
         })
     }
     render(){

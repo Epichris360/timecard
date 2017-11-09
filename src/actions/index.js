@@ -34,6 +34,11 @@ export default {
 			return dispatch(TurboClient.login(credentials, constants.CURRENT_USER_RECEIVED))
 		}
 	},
+	logoutUser: () => {
+		return dispatch => {
+			return dispatch( TurboClient.logout(constants.LOGOUT_USER) )
+		}
+	},
 
 	currentUser: () => {
 		return dispatch => {

@@ -106,6 +106,24 @@ const login = (credentials, actionType) => {
 
 }
 
+const logout = (actionType) => {
+	return dispatch => turbo({site_id:APP_ID}).logout()
+		.then(data => {
+			if (actionType != null){
+				dispatch({
+					type: actionType,
+					data: data
+				})
+			}
+
+			return data
+		})
+		.catch(err => {
+			throw err
+		})
+
+}
+
 const currentUser = (actionType) => {
 	return dispatch => turbo({site_id:APP_ID}).currentUser()
 		.then(data => {
@@ -136,6 +154,7 @@ export default {
 	deleteRequest: deleteRequest,
 	createUser: createUser,
 	login: login,
+	logout: logout,
 	currentUser: currentUser,
 	uploadFile: uploadFile
 

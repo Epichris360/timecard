@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import actions from '../../actions'
-import Loader from './Loader'
+import { connect }          from 'react-redux'
+import actions              from '../../actions'
+import Loader               from './Loader'
+import DangerAlert          from './DangerAlert'
 
 class SignIn extends Component{
     constructor(props){
@@ -31,16 +32,10 @@ class SignIn extends Component{
         return(
             <div className="container" >
                 <div className="row" >
-                
                     {
                         this.state.submitted ? <Loader /> :
                         <div  className="col-xs-12 col-sm-12 col-md-8" >
-                            {
-                                this.state.error ? 
-                                <div className="alert alert-danger">
-                                    <strong>Danger!</strong> {this.state.errorMessage}
-                                </div> : null
-                            }
+                            <DangerAlert error={this.state.error} errorMessage={this.state.errorMessage} />
                             <h1 className="topmargin-sm nobottommargin">Sign In!</h1>
                             <hr/>
                             <input className="form-control" 

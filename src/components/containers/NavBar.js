@@ -4,7 +4,7 @@ import { connect }                                     from 'react-redux'
 import actions                                         from '../../actions'
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap'
 import { LinkContainer }                               from 'react-router-bootstrap'
-
+import { withRouter }                                  from 'react-router'
 
 class NavBar extends Component{
     constructor(props){
@@ -12,7 +12,13 @@ class NavBar extends Component{
     }
     logout(){
         this.props.logout()
-        this.props.history.push('/')
+        .then(date => {
+            this.props.history.push('/')
+        })
+        .catch(err => {
+            console.log('err',err.message)
+        })
+        
     }
     render(){
         return(
@@ -71,4 +77,4 @@ const dispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps,dispatchToProps)(NavBar)
+export default connect(mapStateToProps,dispatchToProps)( withRouter(NavBar) )

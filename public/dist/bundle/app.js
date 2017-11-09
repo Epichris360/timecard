@@ -8110,6 +8110,11 @@ exports.default = {
 			return dispatch(_utils.TurboClient.login(credentials, _constants2.default.CURRENT_USER_RECEIVED));
 		};
 	},
+	logoutUser: function logoutUser() {
+		return function (dispatch) {
+			return dispatch(_utils.TurboClient.logout(_constants2.default.LOGOUT_USER));
+		};
+	},
 
 	currentUser: function currentUser() {
 		return function (dispatch) {
@@ -10252,6 +10257,7 @@ exports.default = {
 	USERS_RECEIVED: 'USERS_RECEIVED',
 	USER_CREATED: 'USER_CREATED',
 	USER_LOGGED_IN: 'USER_LOGGED_IN',
+	LOGOUT_USER: 'LOGOUT_USER',
 	CURRENT_USER_RECEIVED: 'CURRENT_USER_RECEIVED',
 
 	NEW_PROJECT: 'NEW_PROJECT',
@@ -38847,8 +38853,7 @@ exports.default = function () {
 		case _constants2.default.USER_CREATED:
 			return action.data;
 		case _constants2.default.LOGOUT_USER:
-			console.log('user logged out?', action.data);
-			return {};
+			return initialState;
 
 		default:
 			return state;
@@ -42918,6 +42923,23 @@ var login = function login(credentials, actionType) {
 	};
 };
 
+var logout = function logout(actionType) {
+	return function (dispatch) {
+		return (0, _turbo2.default)({ site_id: APP_ID }).logout().then(function (data) {
+			if (actionType != null) {
+				dispatch({
+					type: actionType,
+					data: data
+				});
+			}
+
+			return data;
+		}).catch(function (err) {
+			throw err;
+		});
+	};
+};
+
 var currentUser = function currentUser(actionType) {
 	return function (dispatch) {
 		return (0, _turbo2.default)({ site_id: APP_ID }).currentUser().then(function (data) {
@@ -42947,6 +42969,7 @@ exports.default = {
 	deleteRequest: deleteRequest,
 	createUser: createUser,
 	login: login,
+	logout: logout,
 	currentUser: currentUser,
 	uploadFile: uploadFile
 
@@ -44698,6 +44721,8 @@ var _reactBootstrap = __webpack_require__(129);
 
 var _reactRouterBootstrap = __webpack_require__(408);
 
+var _reactRouter = __webpack_require__(418);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -44718,8 +44743,13 @@ var NavBar = function (_Component) {
     _createClass(NavBar, [{
         key: 'logout',
         value: function logout() {
-            this.props.logout();
-            this.props.history.push('/');
+            var _this2 = this;
+
+            this.props.logout().then(function (date) {
+                _this2.props.history.push('/');
+            }).catch(function (err) {
+                console.log('err', err.message);
+            });
         }
     }, {
         key: 'render',
@@ -44828,7 +44858,7 @@ var dispatchToProps = function dispatchToProps(dispatch) {
     };
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, dispatchToProps)(NavBar);
+exports.default = (0, _reactRedux.connect)(mapStateToProps, dispatchToProps)((0, _reactRouter.withRouter)(NavBar));
 
 /***/ }),
 /* 269 */
@@ -56190,6 +56220,10 @@ var _Loader = __webpack_require__(43);
 
 var _Loader2 = _interopRequireDefault(_Loader);
 
+var _DangerAlert = __webpack_require__(417);
+
+var _DangerAlert2 = _interopRequireDefault(_DangerAlert);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -56248,17 +56282,7 @@ var SignIn = function (_Component) {
                     this.state.submitted ? _react2.default.createElement(_Loader2.default, null) : _react2.default.createElement(
                         'div',
                         { className: 'col-xs-12 col-sm-12 col-md-8' },
-                        this.state.error ? _react2.default.createElement(
-                            'div',
-                            { className: 'alert alert-danger' },
-                            _react2.default.createElement(
-                                'strong',
-                                null,
-                                'Danger!'
-                            ),
-                            ' ',
-                            this.state.errorMessage
-                        ) : null,
+                        _react2.default.createElement(_DangerAlert2.default, { error: this.state.error, errorMessage: this.state.errorMessage }),
                         _react2.default.createElement(
                             'h1',
                             { className: 'topmargin-sm nobottommargin' },
@@ -56569,8 +56593,10 @@ var ProjectsList = function (_Component) {
 
             this.props.getProjects({ user_id: this.props.user.id }).then(function (data) {
                 _this2.setState({ loading: false });
+                return;
             }).catch(function (err) {
                 console.log('err', err.message);
+                return;
             });
         }
     }, {
@@ -56682,6 +56708,10 @@ var _Loader = __webpack_require__(43);
 
 var _Loader2 = _interopRequireDefault(_Loader);
 
+var _DangerAlert = __webpack_require__(417);
+
+var _DangerAlert2 = _interopRequireDefault(_DangerAlert);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -56702,7 +56732,8 @@ var ProjectShow = function (_Component) {
         var _this = _possibleConstructorReturn(this, (ProjectShow.__proto__ || Object.getPrototypeOf(ProjectShow)).call(this, props));
 
         _this.state = {
-            projectOrig: null, projectChange: null, loading: true, newTask: '', blockName: ''
+            projectOrig: null, projectChange: null, loading: true, newTask: '',
+            blockName: '', error: false, errorMessage: ''
         };
         return _this;
     }
@@ -56731,7 +56762,8 @@ var ProjectShow = function (_Component) {
             this.props.updateProject(projectOrig, projectChange).then(function (data) {
                 _this3.setState({ newTask: '', projectChange: projectChange, projectOrig: projectChange });
             }).catch(function (err) {
-                console.log('err', err.message);
+                //console.log('err',err.message)
+                _this3.setState({ error: true, errorMessage: err.message });
             });
         }
     }, {
@@ -56753,7 +56785,8 @@ var ProjectShow = function (_Component) {
             this.props.updateProject(projectOrig, projectChange).then(function (data) {
                 _this4.setState({ projectChange: projectChange, projectOrig: projectChange });
             }).catch(function (err) {
-                console.log('err', err.message);
+                //console.log('err',err.message)
+                _this4.setState({ error: true, errorMessage: err.message });
             });
         }
     }, {
@@ -56775,11 +56808,16 @@ var ProjectShow = function (_Component) {
                 time.start = new Date();
             } else if (which == 'end') {
                 time.end = new Date();
-                var diff = Math.abs(new Date(time.end) - new Date(time.start));
-                var minutes = Math.floor(diff / 1000 / 60);
-                totalTimeTemp = minutes;
+                totalTimeTemp = this.calcTime(time.start, time.end);
             }
             return time;
+        }
+    }, {
+        key: 'calcTime',
+        value: function calcTime(start, end) {
+            var diff = Math.abs(new Date(end) - new Date(start));
+            var minutes = Math.floor(diff / 1000 / 60);
+            return minutes;
         }
     }, {
         key: 'deleteTasks',
@@ -56792,12 +56830,11 @@ var ProjectShow = function (_Component) {
 
             projectChange.tasks = [];
             projectChange.projectTime = 0;
-            //console.log('projectChange',projectChange)
             this.props.updateProject(projectOrig, projectChange).then(function (data) {
-                console.log('done!');
                 _this6.setState({ projectChange: projectChange, projectOrig: projectChange });
             }).catch(function (err) {
-                console.log('err', err.message);
+                //console.log('err',err.message)
+                _this6.setState({ error: true, errorMessage: err.message });
             });
         }
     }, {
@@ -56805,7 +56842,7 @@ var ProjectShow = function (_Component) {
         value: function createTaskBlock(t) {
             var _this7 = this;
 
-            var time = { time_id: (0, _uuid.v4)(), name: this.state.blockName, start: '', end: '' };
+            var time = { time_id: (0, _uuid.v4)(), name: this.state.blockName, start: '', end: '', disabled: false };
             var _state4 = this.state,
                 projectChange = _state4.projectChange,
                 projectOrig = _state4.projectOrig;
@@ -56817,7 +56854,8 @@ var ProjectShow = function (_Component) {
             this.props.updateProject(projectOrig, projectChange).then(function (data) {
                 _this7.setState({ projectChange: projectChange, projectOrig: projectChange, blockName: '' });
             }).catch(function (err) {
-                console.log('err', err.message);
+                //console.log('err',err.message)
+                _this7.setState({ error: true, errorMessage: err.message });
             });
         }
     }, {
@@ -56826,22 +56864,20 @@ var ProjectShow = function (_Component) {
             t.times.push(time);
             return t;
         }
-    }, {
-        key: 'disableTask',
-        value: function disableTask(task) {
+        /*disableTask(task){
             //disable a task and delete its time from the total time of the project
             //if enabled, add this back
             //design a nice front page.
-            var _state5 = this.state,
-                projectChange = _state5.projectChange,
-                projectOrig = _state5.projectOrig;
+            let { projectChange, projectOrig } = this.state
+            let newTasks = projectChange.tasks.map( t => {
+                return(
+                    t.task_id == task.task_id ? findTaskDisable(t) : t 
+                )
+            })
+            projectChange.tasks = newTasks
+            projectChange.projectTime = projectChange.projectTime - tempTaskTime
+        }*/
 
-            var newTasks = projectChange.tasks.map(function (t) {
-                return t.task_id == task.task_id ? findTaskDisable(t) : t;
-            });
-            projectChange.tasks = newTasks;
-            projectChange.projectTime = projectChange.projectTime - tempTaskTime;
-        }
     }, {
         key: 'findTaskDisable',
         value: function findTaskDisable(t) {
@@ -56850,15 +56886,76 @@ var ProjectShow = function (_Component) {
             return t;
         }
     }, {
-        key: 'disableTime',
-        value: function disableTime() {
-            //disable a subtask and take its time away from the task total and from the project total
-            //if added back in, add all this back 
+        key: 'disablingSubTask',
+        value: function disablingSubTask(t, time) {
+            var _this8 = this;
+
+            var durationOfSubTask = this.calcTime(time.start, time.end);
+            var _state5 = this.state,
+                projectChange = _state5.projectChange,
+                projectOrig = _state5.projectOrig;
+
+
+            var tasksIndex = projectChange.tasks.map(function (task) {
+                return task.task_id;
+            }).indexOf(t.task_id);
+            var subtaskIndex = projectChange.tasks[tasksIndex].times.map(function (subtask) {
+                return subtask.time_id;
+            }).indexOf(time.time_id);
+
+            projectChange.tasks[tasksIndex].times[subtaskIndex] = this.disableSubTask(time, true);
+            projectChange.projectTime = projectChange.projectTime - durationOfSubTask;
+
+            this.props.updateProject(projectOrig, projectChange).then(function (data) {
+                _this8.setState({ projectChange: projectChange, projectOrig: projectChange });
+            }).catch(function (err) {
+                //console.log('err',err.message)
+                _this8.setState({ error: true, errorMessage: err.message });
+            });
+        }
+    }, {
+        key: 'enableSubTask',
+        value: function enableSubTask(t, time) {
+            var _this9 = this;
+
+            var durationOfSubTask = this.calcTime(time.start, time.end);
+            var _state6 = this.state,
+                projectChange = _state6.projectChange,
+                projectOrig = _state6.projectOrig;
+
+
+            var tasksIndex = projectChange.tasks.map(function (task) {
+                return task.task_id;
+            }).indexOf(t.task_id);
+            var subtaskIndex = projectChange.tasks[tasksIndex].times.map(function (subtask) {
+                return subtask.time_id;
+            }).indexOf(time.time_id);
+
+            projectChange.tasks[tasksIndex].times[subtaskIndex] = this.disableSubTask(time, false);
+            projectChange.projectTime = projectChange.projectTime + durationOfSubTask;
+
+            this.props.updateProject(projectOrig, projectChange).then(function (data) {
+                _this9.setState({ projectChange: projectChange, projectOrig: projectChange });
+            }).catch(function (err) {
+                //console.log('err',err.message)
+                _this9.setState({ error: true, errorMessage: err.message });
+            });
+        }
+    }, {
+        key: 'disableSubTask',
+        value: function disableSubTask(tm, which) {
+            if (which == true) {
+                tm.disabled = true;
+                return tm;
+            } else {
+                tm.disabled = false;
+                return tm;
+            }
         }
     }, {
         key: 'render',
         value: function render() {
-            var _this8 = this;
+            var _this10 = this;
 
             return _react2.default.createElement(
                 'div',
@@ -56872,6 +56969,7 @@ var ProjectShow = function (_Component) {
                         _react2.default.createElement(
                             'div',
                             { className: 'row' },
+                            _react2.default.createElement(_DangerAlert2.default, { error: this.state.error, errorMessage: this.state.errorMessage }),
                             _react2.default.createElement(
                                 'div',
                                 { className: 'col-md-6 col-sm-6 col-xs-12' },
@@ -56916,7 +57014,7 @@ var ProjectShow = function (_Component) {
                                 _react2.default.createElement('input', { type: 'text', placeholder: 'Add a New Task Name...',
                                     className: 'form-control',
                                     onChange: function onChange(e) {
-                                        return _this8.setState({ newTask: e.target.value });
+                                        return _this10.setState({ newTask: e.target.value });
                                     }, value: this.state.newTask }),
                                 _react2.default.createElement('br', null),
                                 _react2.default.createElement(
@@ -56949,14 +57047,14 @@ var ProjectShow = function (_Component) {
                                             _react2.default.createElement(
                                                 'div',
                                                 { className: 'col-md-6 col-sm-6' },
-                                                _react2.default.createElement('input', { type: 'text', placeholder: 'Name this block of Time!', value: _this8.state.blockName,
+                                                _react2.default.createElement('input', { type: 'text', placeholder: 'Name this block of Time!', value: _this10.state.blockName,
                                                     className: 'form-control', onChange: function onChange(e) {
-                                                        return _this8.setState({ blockName: e.target.value });
+                                                        return _this10.setState({ blockName: e.target.value });
                                                     } })
                                             ),
                                             _react2.default.createElement(
                                                 'button',
-                                                { className: 'btn btn-success col-md-4 col-sm-4 col-xs-12', onClick: _this8.createTaskBlock.bind(_this8, t) },
+                                                { className: 'btn btn-success col-md-4 col-sm-4 col-xs-12', onClick: _this10.createTaskBlock.bind(_this10, t) },
                                                 'Create!'
                                             )
                                         )
@@ -56981,17 +57079,28 @@ var ProjectShow = function (_Component) {
                                                 ),
                                                 time.start == '' ? _react2.default.createElement(
                                                     'button',
-                                                    { onClick: _this8.updateBlockTime.bind(_this8, t, time, 'start'),
+                                                    { onClick: _this10.updateBlockTime.bind(_this10, t, time, 'start'),
                                                         style: { width: '150px' },
                                                         className: 'btn btn-success btn-xs pull-right' },
                                                     'Start'
                                                 ) : time.end == '' ? _react2.default.createElement(
                                                     'button',
-                                                    { onClick: _this8.updateBlockTime.bind(_this8, t, time, 'end'),
+                                                    { onClick: _this10.updateBlockTime.bind(_this10, t, time, 'end'),
                                                         style: { width: '150px' },
                                                         className: 'btn btn-success btn-xs pull-right' },
                                                     'End'
-                                                ) : null
+                                                ) : !time.disabled ? _react2.default.createElement(
+                                                    'button',
+                                                    { onClick: _this10.disablingSubTask.bind(_this10, t, time),
+                                                        style: { width: '150px' },
+                                                        className: 'btn btn-danger btn-xs pull-right' },
+                                                    'Remove?'
+                                                ) : _react2.default.createElement(
+                                                    'button',
+                                                    { className: 'btn btn-danger btn-xs pull-right',
+                                                        onClick: _this10.enableSubTask.bind(_this10, t, time) },
+                                                    'Enable?'
+                                                )
                                             );
                                         })
                                     )
@@ -57178,6 +57287,109 @@ function v4(options, buf, offset) {
 }
 
 module.exports = v4;
+
+
+/***/ }),
+/* 417 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var DangerAlert = function (_Component) {
+    _inherits(DangerAlert, _Component);
+
+    function DangerAlert(props) {
+        _classCallCheck(this, DangerAlert);
+
+        return _possibleConstructorReturn(this, (DangerAlert.__proto__ || Object.getPrototypeOf(DangerAlert)).call(this, props));
+    }
+
+    _createClass(DangerAlert, [{
+        key: "render",
+        value: function render() {
+            return _react2.default.createElement(
+                "div",
+                null,
+                this.props.error ? _react2.default.createElement(
+                    "div",
+                    { className: "alert alert-danger" },
+                    _react2.default.createElement(
+                        "strong",
+                        null,
+                        "Danger!"
+                    ),
+                    " ",
+                    this.props.errorMessage
+                ) : null
+            );
+        }
+    }]);
+
+    return DangerAlert;
+}(_react.Component);
+
+exports.default = DangerAlert;
+
+/***/ }),
+/* 418 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__MemoryRouter__ = __webpack_require__(226);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "MemoryRouter", function() { return __WEBPACK_IMPORTED_MODULE_0__MemoryRouter__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Prompt__ = __webpack_require__(232);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Prompt", function() { return __WEBPACK_IMPORTED_MODULE_1__Prompt__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Redirect__ = __webpack_require__(234);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Redirect", function() { return __WEBPACK_IMPORTED_MODULE_2__Redirect__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Route__ = __webpack_require__(125);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Route", function() { return __WEBPACK_IMPORTED_MODULE_3__Route__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Router__ = __webpack_require__(78);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Router", function() { return __WEBPACK_IMPORTED_MODULE_4__Router__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__StaticRouter__ = __webpack_require__(240);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "StaticRouter", function() { return __WEBPACK_IMPORTED_MODULE_5__StaticRouter__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Switch__ = __webpack_require__(242);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Switch", function() { return __WEBPACK_IMPORTED_MODULE_6__Switch__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__matchPath__ = __webpack_require__(79);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "matchPath", function() { return __WEBPACK_IMPORTED_MODULE_7__matchPath__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__withRouter__ = __webpack_require__(245);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "withRouter", function() { return __WEBPACK_IMPORTED_MODULE_8__withRouter__["a"]; });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /***/ })

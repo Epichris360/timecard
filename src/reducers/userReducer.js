@@ -14,8 +14,7 @@ export default (state = initialState, action) => {
 		case constants.USER_CREATED:
 			return action.data
 		case constants.LOGOUT_USER:
-			console.log('user logged out?',action.data)
-			return {}
+			return initialState
 
 		default:
 			return state

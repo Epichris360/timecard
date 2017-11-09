@@ -131,6 +131,32 @@ class ProjectShow extends Component{
         tempTaskTime = t.totalTime
         return t
     }
+    disablingTask(t){
+        let { projectChange, projectOrig } = this.state
+        const tasksIndex = projectChange.tasks.map( task => task.task_id ).indexOf( t.task_id )
+        projectChange.tasks[tasksIndex].disabled = true
+        projectChange.projectTime = projectChange.projectTime - projectChange.tasks[tasksIndex].totalTime
+        this.props.updateProject(projectOrig, projectChange)
+        .then(data => {
+            this.setState({projectChange: projectChange, projectOrig: projectChange})
+        })
+        .catch(err => {
+            this.setState({error:true, errorMessage: err.message})
+        }) 
+    }
+    enableTask(t){
+        let { projectChange, projectOrig } = this.state
+        const tasksIndex = projectChange.tasks.map( task => task.task_id ).indexOf( t.task_id )
+        projectChange.tasks[tasksIndex].disabled = false
+        projectChange.projectTime = projectChange.projectTime + projectChange.tasks[tasksIndex].totalTime
+        this.props.updateProject(projectOrig, projectChange)
+        .then(data => {
+            this.setState({projectChange: projectChange, projectOrig: projectChange})
+        })
+        .catch(err => {
+            this.setState({error:true, errorMessage: err.message})
+        }) 
+    }
     disablingSubTask(t, time){
         const durationOfSubTask = this.calcTime(time.start, time.end)
         const { projectChange, projectOrig } = this.state
@@ -139,6 +165,7 @@ class ProjectShow extends Component{
         let subtaskIndex =  projectChange.tasks[tasksIndex].times.map( subtask => subtask.time_id ).indexOf(time.time_id)
         
         projectChange.tasks[tasksIndex].times[subtaskIndex] = this.disableSubTask(time, true)
+        projectChange.tasks[tasksIndex].totalTime = projectChange.tasks[tasksIndex].totalTime - durationOfSubTask
         projectChange.projectTime = projectChange.projectTime - durationOfSubTask
 
         this.props.updateProject(projectOrig, projectChange)
@@ -158,6 +185,7 @@ class ProjectShow extends Component{
         let subtaskIndex =  projectChange.tasks[tasksIndex].times.map( subtask => subtask.time_id ).indexOf(time.time_id)
         
         projectChange.tasks[tasksIndex].times[subtaskIndex] = this.disableSubTask(time, false)
+        projectChange.tasks[tasksIndex].totalTime = projectChange.tasks[tasksIndex].totalTime + durationOfSubTask        
         projectChange.projectTime = projectChange.projectTime + durationOfSubTask
 
         this.props.updateProject(projectOrig, projectChange)
@@ -222,7 +250,7 @@ class ProjectShow extends Component{
                                 {
                                     this.state.projectChange.tasks.map( (t,i) => {
                                         return(
-                                            <Panel header={ `Task: ${t.name} | Total Time: ${t.totalTime}` } eventKey={i} key={i}>
+                                            <Panel header={ `Task: ${t.name} | Total Time: ${t.totalTime} ${ t.disabled ? '| Disabled!!!!' : '' }` } eventKey={i} key={i}>
                                                 <div className="row">
                                                     <div className="col-md-12 col-sm-12 col-xs-12">
                                                         <div className="col-md-6 col-sm-6">
@@ -234,7 +262,20 @@ class ProjectShow extends Component{
                                                 </div>
                                                 <br/>
                                                 {
-                                                    t.times != [] ? <span>Blocks of Time:</span> : null
+                                                    t.times != [] ? 
+                                                        <div>
+                                                            <span style={ t.disabled ? {color:'gray'} : {} } >Blocks of Time:</span>
+                                                            {
+                                                                t.disabled ? 
+                                                                <button className="btn btn-success btn-xs pull-right"
+                                                                    onClick={this.enableTask.bind(this,t)} > 
+                                                                    Enable This Task?
+                                                                </button> :
+                                                                <button onClick={ this.disablingTask.bind(this, t) }
+                                                                className="btn btn-danger btn-xs pull-right">Disable This Task?</button>
+                                                            }
+                                                        </div>
+                                                        : null
                                                 }
                                                 <ul className="row list-group">
                                                     {
